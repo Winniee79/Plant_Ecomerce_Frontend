@@ -1,0 +1,42 @@
+.container {
+    padding: 24px;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.productList {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 6px;
+    width: 180px;
+}
+
+.image {
+    width: 150px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.name {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+.price {
+    color: #2e7d32;
+    font-weight: 600;
+}
+
+.actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+}
