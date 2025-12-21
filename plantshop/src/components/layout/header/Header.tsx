@@ -5,17 +5,21 @@ import logo from "../../../assets/images/Logo.png";
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
+    const [openUser, setOpenUser] = useState(false);
 
     // ref bao cả menu trigger + mega menu
     const menuRef = useRef<HTMLDivElement>(null);
-
+    const userRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
                 menuRef.current &&
-                !menuRef.current.contains(e.target as Node)
+                !menuRef.current.contains(e.target as Node) &&
+                userRef.current &&
+                !userRef.current.contains(e.target as Node)
             ) {
                 setOpenMenu(false);
+                setOpenUser(false);
             }
         };
 
@@ -75,7 +79,33 @@ const Header = () => {
                     <div className={styles.action}>
                         <i className="fa-solid fa-magnifying-glass" />
                         <i className="fa-solid fa-cart-shopping" />
+                        <div
+                            className={styles.userWrapper}
+                            ref={userRef}
+                            onClick={() => setOpenUser(prev => !prev)}
+                        >
                         <i className="fa-solid fa-user" />
+                            {openUser && (
+                                <div className={styles.userDropdown}>
+                                    <div className={styles.dropdownItem}>
+                                        <i className="fa-solid fa-user-circle" />
+                                        <span>Tài khoản</span>
+                                    </div>
+
+                                    <div className={styles.dropdownItem}>
+                                        <i className="fa-solid fa-box" />
+                                        <span>Đơn mua</span>
+                                    </div>
+
+                                    <div className={styles.divider} />
+
+                                    <div className={`${styles.dropdownItem} ${styles.logout}`}>
+                                        <i className="fa-solid fa-right-from-bracket" />
+                                        <span>Đăng xuất</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </header>
