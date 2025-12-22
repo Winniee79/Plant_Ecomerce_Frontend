@@ -1,0 +1,223 @@
+{
+  "category":[
+    {
+      "id": 2,
+      "name": "Cây trong nhà",
+      "slug": "cay-trong-nha",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 1,
+            "name": "Kiểu dáng",
+            "slug": "style"
+          },
+          "attributes": [
+            {
+              "id": 1,
+              "name": "Cây cao lớn",
+              "slug": "cao-lon"
+            },
+            {
+              "id": 2,
+              "name": "Cây nhiệt đới",
+              "slug": "nhiet-doi"
+            },
+            {
+              "id": 3,
+              "name": "Cây kiểng lá",
+              "slug": "kieng-la"
+            },
+            {
+              "id": 4,
+              "name": "Cây cảnh Mini",
+              "slug": "cay-canh-mini"
+            },
+            {
+              "id": 5,
+              "name": "Cây treo trong nhà",
+              "slug": "cay-treo-trong-nha"
+            }
+          ]
+        },
+        {
+          "group": {
+            "id": 2,
+            "name": "Vị trí đặt",
+            "slug": "placement"
+          },
+          "attributes": [
+            {
+              "id": 11,
+              "name": "Để bàn",
+              "slug": "de-ban"
+            },
+            {
+              "id": 12,
+              "name": "Văn phòng",
+              "slug": "van-phong"
+            },
+            {
+              "id": 13,
+              "name": "Ban công",
+              "slug": "ban-cong"
+            },
+            {
+              "id": 14,
+              "name": "Phòng khách",
+              "slug": "phong-khach"
+            },
+            {
+              "id": 15,
+              "name": "Phong bếp",
+              "slug": "phong-bep"
+            },
+            {
+              "id": 16,
+              "name": "Trước cửa & hành lang",
+              "slug": "truoc-cua-va-hanh-lang"
+            }
+          ]
+        },
+        {
+          "group": {
+            "id": 3,
+            "name": "Chức năng",
+            "slug": "function"
+          },
+          "attributes": [
+            {
+              "id": 17,
+              "name": "Cây lọc không khí",
+              "slug": "loc-khong-khi"
+            },
+            {
+              "id": 18,
+              "name": "Cây dễ trồng",
+              "slug": "de-trong"
+            },
+            {
+              "id": 19,
+              "name": "Cây thủy sinh",
+              "slug": "thuy-sinh"
+            },
+            {
+              "id": 20,
+              "name": "Cây phong thủy",
+              "slug": "phong-thuy"
+            },
+            {
+              "id": 21,
+              "name": "Cây cần  sánh sáng",
+              "slug": "it-anh-sang"
+            },
+            {
+              "id": 52,
+              "name": "Cây trang trí",
+              "slug": "trang-tri"
+            }
+          ]
+        }
+      ]
+    }
+    ,
+    {
+      "id": 3,
+      "name": "Cây ngoài trời",
+      "slug": "cay-ngoai-troi",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 1,
+            "name": "Kiểu dáng",
+            "slug": "style"
+          },
+          "attributes": [
+            { "id": 6, "name": "Cây Tầm Trung", "slug": "cay-tam-trung" },
+            { "id": 7, "name": "Cây Tầm Thấp", "slug": "cay-tam-thap" },
+            { "id": 8, "name": "Tán Hình Tròn", "slug": "tan-hinh-tron" },
+            { "id": 9, "name": "Tán Hình Tháp", "slug": "tan-hinh-thap" },
+            { "id": 10, "name": "Tán Phân Tầng", "slug": "tan-phan-tang" }
+          ]
+        },
+        {
+          "group": {
+            "id": 3,
+            "name": "Chức năng",
+            "slug": "function"
+          },
+          "attributes": [
+            { "id": 22, "name": "Cây Bóng Mát", "slug": "cay-bong-mat" },
+            { "id": 23, "name": "Cây Có Hoa", "slug": "cay-co-hoa" },
+            { "id": 24, "name": "Cây Ăn Quả", "slug": "cay-an-qua" },
+            { "id": 25, "name": "Cây Hàng Rào", "slug": "cay-hang-rao" },
+            { "id": 26, "name": "Cây Phủ Nền", "slug": "cay-phu-nen" },
+            { "id": 27, "name": "Cỏ Nền", "slug": "co-nen" }
+          ]
+        },
+        {
+          "group": {
+            "id": 4,
+            "name": "Đặc điểm",
+            "slug": "feature"
+          },
+          "attributes": [
+            { "id": 28, "name": "Cây Thường Xanh", "slug": "cay-thuong-xanh" },
+            { "id": 29, "name": "Cây Lá Màu", "slug": "cay-la-mau" },
+            { "id": 30, "name": "Cây Dạng Bụi", "slug": "cay-dang-bui" },
+            { "id": 31, "name": "Cây Leo Dàn", "slug": "cay-leo-dan" },
+            { "id": 32, "name": "Cây Thân Đốt", "slug": "cay-than-dot" }
+          ]
+        }
+      ]
+    }
+,
+    {
+      "id": 4,
+      "name": "Chậu cây",
+      "slug": "chau-cay",
+      "attribute_groups": [
+        {
+          "group": {
+            "id": 1,
+            "name": "Kiểu dáng",
+            "slug": "style"
+          },
+          "attributes": [
+            { "id": 38, "name": "Chậu Hình Vuông", "slug": "chau-hinh-vuong" },
+            { "id": 39, "name": "Chậu Chữ Nhật", "slug": "chau-chu-nhat" },
+            { "id": 40, "name": "Hình Tròn Bầu", "slug": "hinh-tron-bau" },
+            { "id": 41, "name": "Trụ Tròn Đứng", "slug": "tru-tron-dung" },
+            { "id": 42, "name": "Chậu Treo", "slug": "chau-treo" }
+          ]
+        },
+        {
+          "group": {
+            "id": 5,
+            "name": "Chất liệu",
+            "slug": "material"
+          },
+          "attributes": [
+            { "id": 43, "name": "Chậu Nhựa", "slug": "chau-nhua" },
+            { "id": 44, "name": "Chậu Xi Măng", "slug": "chau-xi-mang" },
+            { "id": 45, "name": "Chậu Đất Nung", "slug": "chau-dat-nung" },
+            { "id": 46, "name": "Chậu Gốm Sứ", "slug": "chau-gom-su" },
+            { "id": 47, "name": "Chậu Gỗ", "slug": "chau-go" }
+          ]
+        },
+        {
+          "group": {
+            "id": 6,
+            "name": "Kích thước",
+            "slug": "size"
+          },
+          "attributes": [
+            { "id": 48, "name": "Chậu Nhỏ Để Bàn", "slug": "chau-nho-de-ban" },
+            { "id": 49, "name": "Chậu Cỡ Trung", "slug": "chau-co-trung" },
+            { "id": 50, "name": "Chậu Cỡ Lớn", "slug": "chau-co-lon" },
+            { "id": 51, "name": "Chậu Dáng Cao", "slug": "chau-dang-cao" }
+          ]
+        }
+      ]
+    }
+  ]
+}
