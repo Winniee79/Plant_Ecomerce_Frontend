@@ -6,32 +6,41 @@ body {
 .header {
     width: 100%;
     min-width: 1200px;
-    background-color: #F0F5F0;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
 }
 
 .content {
     display: flex;
+    background-color: #f4fbf6;
     align-items: center;
-    padding: 10px 40px;
+    padding: 5px 60px;
     justify-content: space-between;
+    margin: 0 auto;
 }
 
 /* 1. LOGO */
 .logo img {
-    height: 50px;
-    width: 200px;
+    height: 70px;
+    width: auto;
     object-fit: contain;
+    display: block;
 }
 
 /* 2. MENU */
+.menuheader {
+    background-color: #224229;
+    color: white;
+}
 .menu {
     display: flex;
-    gap: 20px;
+    gap: 30px;
     padding: 10px;
+    color: white;
+    justify-content: center;
 }
 
 .menuItem {
@@ -39,16 +48,16 @@ body {
     gap: 10px;
     cursor: pointer;
     align-items: center;
-    color: #343434;
+    color: white;
     font-weight: 500;
     font-size: 16px;
 }
 .menuItem:hover {
-    color: #01370C;
+    color: #f4fbf6;
     font-weight: 700;
 }
 .menuItem.active span {
-    color: #01370C;
+    color: #f4fbf6;
     font-weight: 600;
 }
 
@@ -73,7 +82,7 @@ body {
 /* ===== 2.1 MEGA MENU ===== */
 .megaMenu {
     position: fixed;
-    top: 70px;
+    top: 110px;
     left: 0;
     width: 100%;
     background: #faf8f3;
@@ -87,7 +96,7 @@ body {
     padding: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 220px;
-    gap: 30px;
+    gap: 10px;
 }
 
 /* COLUMN */
@@ -110,7 +119,7 @@ body {
 }
 .column a i {
     font-size: 13px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 /* IMAGE */
@@ -136,7 +145,7 @@ body {
     border: 1px solid #eee;
     border-radius: 6px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    z-index: 1001;
+    z-index: 999;
 }
 
 .dropdownItem {

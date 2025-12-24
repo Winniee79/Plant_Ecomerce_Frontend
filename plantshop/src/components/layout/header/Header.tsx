@@ -50,55 +50,13 @@ const Header = () => {
                         <img src={logo} alt="Logo" />
                     </div>
 
-                    {/* 2. MENU */}
-                    <div className={styles.menu} ref={menuRef}>
-                        {categories.map(cat => (
-                        <div
-                            key={cat.id}
-                            className={`${styles.menuItem} ${
-                                openMenu === cat.id ? styles.active : ""
-                            }`}
-                            onClick={() => handleMenuClick(cat.id)}
-                        >
-                            <span>{cat.name}</span>
-                            <i
-                                className={`fa-solid ${
-                                    openMenu === cat.id
-                                        ? "fa-angle-up"
-                                        : "fa-angle-down"
-                                }`}
-                            />
-                        </div>
-                        ))}
-                        {/*<div className={styles.menuItem}>*/}
-                        {/*    <span>Cây ngoài trời</span>*/}
-                        {/*</div>*/}
-
-                        {/*<div className={styles.menuItem}>*/}
-                        {/*    <span>Chậu cây</span>*/}
-                        {/*    <i className="fa-solid fa-angle-down" />*/}
-                        {/*</div>*/}
-
-                        <div className={styles.menuItem}>
-                            <span>Vật tư</span>
-                            <i className="fa-solid fa-angle-down" />
-                        </div>
-
-                        <div className={styles.menuItem}>
-                            <span>Hướng dẫn</span>
-                            <i className="fa-solid fa-angle-down" />
-                        </div>
-                    </div>
-
                     {/* 3. ACTION */}
                     <div className={styles.action}>
                         <i className="fa-solid fa-magnifying-glass" />
                         <i className="fa-solid fa-cart-shopping" />
-                        <div
-                            className={styles.userWrapper}
+                        <div className={styles.userWrapper}
                             ref={userRef}
-                            onClick={() => setOpenUser(prev => !prev)}
-                        >
+                            onClick={() => setOpenUser(prev => !prev)}>
                         <i className="fa-solid fa-user" />
                             {openUser && (
                                 <div className={styles.userDropdown}>
@@ -123,6 +81,29 @@ const Header = () => {
                         </div>
                     </div>
                 </div>
+                <div className={styles.menuheader}>
+                    {/* 2. MENU */}
+                    <div className={styles.menu} ref={menuRef}>
+                        {categories.map(cat => (
+                            <div key={cat.id}
+                                 className={`${styles.menuItem} ${
+                                     openMenu === cat.id ? styles.active : ""
+                                 }`}
+                                 onClick={() => handleMenuClick(cat.id)}>
+                                <span>{cat.name}</span>
+                                <i className={`fa-solid ${
+                                    openMenu === cat.id
+                                        ? "fa-angle-up"
+                                        : "fa-angle-down"
+                                }`}/>
+                            </div>
+                        ))}
+                        {/*<div className={styles.menuItem}>*/}
+                        {/*    <span>Hướng dẫn</span>*/}
+                        {/*    <i className="fa-solid fa-angle-down" />*/}
+                        {/*</div>*/}
+                    </div>
+                </div>
             </header>
 
             {/* 2.1 MEGA MENU */}
@@ -137,7 +118,7 @@ const Header = () => {
                                         <h4>Theo {group.group.name}</h4>
                                         {group.attributes.map(attr => (
                                             <a key={attr.id} className={styles.attrLink}>
-                                                <i className="fa-solid fa-leaf" aria-hidden="true" />
+                                                <i className="fa-solid fa-seedling" aria-hidden="true" />
                                                 <span className={styles.attrText}>{attr.name}</span>
                                             </a>
                                         ))}

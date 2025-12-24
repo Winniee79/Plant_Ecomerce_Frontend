@@ -2,9 +2,9 @@ import { api } from "./api";
 import type { Category, CategoryResponse } from "../types/category.type";
 
 export const categoryService = {
-    // Lấy all catelogy
+    // Lấy all catelogies
     getAll() : Promise<Category[]> {
-        return api.get<CategoryResponse>("/category").then(res => res.data.categories);
+        return api.get<CategoryResponse>("/categories").then(res => res.data.categories);
     },
 
     // Lấy 1 category theo id
