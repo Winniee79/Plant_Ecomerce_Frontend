@@ -1,6 +1,7 @@
 import { productHandlers } from "./product.handler";
-import { wishlistHandlers } from './wishlist.handler';
+import {categoryHandlers} from "./category.handler";
+
 export const handlers = [
     ...productHandlers,
-    ...wishlistHandlers,
+    ...categoryHandlers
 ];
