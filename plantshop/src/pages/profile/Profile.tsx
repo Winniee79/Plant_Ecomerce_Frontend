@@ -13,9 +13,9 @@ const Profile: React.FC = () => {
 
     // State giả lập dữ liệu user
     const [formData, setFormData] = useState({
-        firstName: 'An',
-        lastName: 'Nguyễn Văn',
-        email: 'nguyenvanan@gmail.com',
+        firstName: 'Bảo An',
+        lastName: 'Nguyễn',
+        email: 'nguyenbaoan@gmail.com',
         phone: '0989 895 433',
     });
 
@@ -56,7 +56,7 @@ const Profile: React.FC = () => {
                         <div className={styles.formSection}>
                             <div style={{display: 'flex', gap: '20px'}}>
                                 <div className={styles.formGroup} style={{flex: 1}}>
-                                    <label className={styles.label}>Họ & Tên đệm</label>
+                                    <label className={styles.label}>Họ</label>
                                     <input
                                         type="text"
                                         name="lastName"
@@ -111,7 +111,7 @@ const Profile: React.FC = () => {
 
                         {/* Cột Phải: Ảnh đại diện */}
 
-                        <div className={styles.avatarWrapper}>
+                        {/*<div className={styles.avatarWrapper}>
                             <img
                                 //src="https://i.pravatar.cc/300?img=12"
                                 //src="https://cdn-icons-png.freepik.com/512/3607/3607444.png"
@@ -120,10 +120,84 @@ const Profile: React.FC = () => {
                                 alt="Avatar người dùng"
                                 className={styles.avatar}
                             />
+                        </div>*/}
+
+                        {/* Cột Phải: Ảnh đại diện */}
+                        <div className={styles.photoSection}>
+                            <p className={styles.label} style={{ marginBottom: '15px' }}></p>
+                            <div className={styles.avatarWrapper}>
+                                <img
+                                    //src="https://i.pinimg.com/736x/fa/88/c2/fa88c242e9d0511f0976baaeb288a7a2.jpg"
+                                    src="https://cdn.prod.website-files.com/6516b906a45da7a169a81553/653fbb4b1d9ed3bffbf4ba68_user_physiopoint3.png"
+                                    alt="Avatar người dùng"
+                                    className={styles.avatar}
+                                />
+                            </div>
+                            <label className={styles.userName}>
+                               Bảo An
+                            </label>
                         </div>
                     </div>
                 )}
 
+                {activeTab === 'orders' && (
+                    <div className={styles.ordersTab}>
+                        <div className={styles.orderList}>
+
+                            {/* Item 1 */}
+                            <div className={styles.orderCard}>
+                                <div className={styles.orderHeader}>
+                                    <span className={styles.orderId}>#ORD-2023-1108</span>
+                                    <span className={styles.orderDate}>26/12/2025</span>
+                                </div>
+                                <div className={styles.orderBody}>
+                                    <div className={styles.orderInfo}>
+                                        <span className={styles.infoLabel}>Tổng tiền:</span>
+                                        <span className={styles.orderPrice}>890,000đ</span>
+                                    </div>
+                                    <span className={`${styles.orderStatus} ${styles['status-pending']}`}>
+                                        Chờ xác nhận
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Item 2 */}
+                            <div className={styles.orderCard}>
+                                <div className={styles.orderHeader}>
+                                    <span className={styles.orderId}>#ORD-2023-1105</span>
+                                    <span className={styles.orderDate}>25/12/2025</span>
+                                </div>
+                                <div className={styles.orderBody}>
+                                    <div className={styles.orderInfo}>
+                                        <span className={styles.infoLabel}>Tổng tiền:</span>
+                                        <span className={styles.orderPrice}>560,000đ</span>
+                                    </div>
+                                    <span className={`${styles.orderStatus} ${styles['status-shipping']}`}>
+                                        Đang vận chuyển
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Item 3 */}
+                            <div className={styles.orderCard}>
+                                <div className={styles.orderHeader}>
+                                    <span className={styles.orderId}>#ORD-2023-1102</span>
+                                    <span className={styles.orderDate}>20/12/2023</span>
+                                </div>
+                                <div className={styles.orderBody}>
+                                    <div className={styles.orderInfo}>
+                                        <span className={styles.infoLabel}>Tổng tiền:</span>
+                                        <span className={styles.orderPrice}>1,250,000đ</span>
+                                    </div>
+                                    <span className={`${styles.orderStatus} ${styles['status-completed']}`}>
+                                        Giao thành công
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -1,10 +1,24 @@
-/* Layout chính */
 .container {
-    background-color: #F0F5F0; /* Màu nền yêu cầu */
-    min-height: 100vh; /* Chiếm full chiều cao nếu nội dung ít */
-    padding: 40px 20px;
-    font-family: 'Inter', sans-serif; /* Font body cơ bản */
+    background-color: #F0F5F0;
+    min-height: 100vh;
+    padding: 30px 20px;
+    font-family: 'Inter', sans-serif;
     color: #333;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: block;
+    background-color: #F0F5F0;
 }
 
 .contentWrapper {
@@ -12,13 +26,12 @@
     margin: 0 auto;
 }
 
-/* Tiêu đề trang - Style giống trang Home */
 .pageTitle {
-    font-family: 'Playfair Display', serif; /* Giả lập font serif trong ảnh */
+    font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     text-align: center;
-    color: #1a3c1e; /* Màu xanh đen đậm cho chữ */
-    margin-bottom: 40px;
+    color: #1a3c1e;
+    margin-bottom: 10px;
     font-weight: 700;
 }
 
@@ -27,7 +40,7 @@
     display: flex;
     gap: 30px;
     border-bottom: 1px solid #d1d9d1;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .tabItem {
@@ -46,7 +59,7 @@
 
 .activeTab {
     color: #1a1a1a;
-    border-bottom-color: #3B823E; /* Gạch chân màu xanh chủ đạo */
+    border-bottom-color: #3B823E;
 }
 
 /* Bố cục Form (Chia 2 cột: Form trái, Ảnh phải) */
@@ -73,10 +86,11 @@
 }
 
 .input {
+    background: #fff;
     width: 100%;
     padding: 12px 15px;
+    color: #333;
     border: 1px solid #ccc;
-    background-color: transparent; /* Để nền hòa vào background chung */
     border-radius: 4px;
     font-size: 1rem;
     outline: none;
@@ -87,11 +101,22 @@
     border-color: #3B823E;
 }
 
+/* Phần Ảnh */
+.photoSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .avatarWrapper {
-    width: 100%;
-    height: 100%;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
     overflow: hidden;
     margin-bottom: 20px;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .avatar {
@@ -100,34 +125,24 @@
     object-fit: cover;
 }
 
-.uploadBtn {
-    background-color: transparent;
-    border: 1px solid #333;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s;
+.userName{
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
 }
 
-.uploadBtn:hover {
-    background-color: #333;
-    color: #fff;
-}
 
-/* --- THÊM MỚI VÀO CUỐI FILE HOẶC CHỖ FORM --- */
-
-/* Bao quanh 2 nút để xếp ngang */
 .buttonGroup {
     display: flex;
-    gap: 15px; /* Khoảng cách giữa 2 nút */
-    margin-top: 20px;
+    gap: 20px; /* Khoảng cách giữa 2 nút */
+    margin-top: 30px;
 }
 
-/* Style cho nút Đăng xuất (Viền đỏ) */
 .logoutBtn {
-    flex: 1; /* Chiếm 50% diện tích */
-    background-color: transparent;
-    border: 1px solid #333; /* Màu đỏ cảnh báo */
+    flex: 0.3; /* Chiếm 50% diện tích */
+    background:#333;
+    color: white;
+    border: 1px solid #333;
     padding: 15px;
     font-size: 1rem;
     font-weight: 600;
@@ -137,14 +152,11 @@
 }
 
 .logoutBtn:hover {
-    background-color: #333;
-    color: white;
+    background-color: #01370C;
 }
 
-/* --- SỬA LẠI NÚT SAVE BTN --- */
-/* Tìm class .saveBtn cũ và thay bằng đoạn này */
 .saveBtn {
-    flex: 1; /* Chiếm 50% diện tích còn lại */
+    flex: 0.3; /* Chiếm 50% diện tích còn lại */
     background-color: #3B823E;
     color: white;
     border: none;
@@ -154,28 +166,109 @@
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s;
-    /* margin-top: 20px; -> XÓA DÒNG NÀY (vì đã có margin ở buttonGroup) */
-    /* width: 100%; -> XÓA DÒNG NÀY (để dùng flex) */
 }
 
 .saveBtn:hover {
-    background-color: #2e6631;
+    background-color: #01370C;
 }
 
-/* Responsive cho mobile */
-@media (max-width: 768px) {
-    .profileLayout {
-        grid-template-columns: 1fr; /* Xuống 1 cột */
-        display: flex;
-        flex-direction: column-reverse; /* Đưa ảnh lên đầu */
-    }
 
-    .avatarWrapper {
-        margin: 0 auto 20px;
-    }
+/* --- CSS CHO PHẦN ĐƠN HÀNG (ORDER LIST) --- */
 
-    .photoSection {
-        width: 100%;
-        margin-bottom: 30px;
-    }
+.orderList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các đơn hàng */
+    width: 100%;
+}
+
+.orderCard {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer; /* Con trỏ tay để biết click được */
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+/* Hiệu ứng khi di chuột vào đơn hàng: Viền xanh đậm và nổi lên */
+.orderCard:hover {
+    border-color: #3B823E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 62, 0.15);
+}
+
+/* Dòng trên cùng: ID và Ngày */
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.orderId {
+    font-weight: 700;
+    color: #1a3c1e; /* Màu xanh đậm giống title */
+    font-size: 1.05rem;
+}
+
+.orderDate {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Dòng dưới: Giá tiền và Trạng thái */
+.orderBody {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.infoLabel {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.orderPrice {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #3B823E; /* Màu xanh thương hiệu cho giá tiền */
+}
+
+/* Badge hiển thị trạng thái (Status) */
+.orderStatus {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Màu sắc riêng cho từng trạng thái */
+.status-completed {
+    background-color: #e6f4ea;
+    color: #1e8e3e; /* Xanh lá */
+}
+
+.status-shipping {
+    background-color: #e8f0fe;
+    color: #1967d2; /* Xanh dương */
+}
+
+.status-pending {
+    background-color: #fef7e0;
+    color: #f9ab00; /* Vàng cam */
+}
+
+.status-cancelled {
+    background-color: #fce8e6;
+    color: #c5221f; /* Đỏ */
 }
