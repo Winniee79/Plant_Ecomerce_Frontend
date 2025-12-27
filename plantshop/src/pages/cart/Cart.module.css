@@ -9,10 +9,16 @@ body {
     padding: 20px;
 }
 
-.title {
+.breadcrumb {
+    text-align: center;
     font-size: 32px;
     font-weight: 500;
-    margin-bottom: 30px;
+    color: #999;
+    margin-bottom: 24px;
+}
+
+.breadcrumb b {
+    color: #213547;
 }
 
 .list {

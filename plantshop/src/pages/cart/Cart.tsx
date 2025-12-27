@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import styles from "./Cart.module.css";
 import Button from "../../components/common/Button";
 
@@ -39,12 +39,12 @@ const Cart = () => {
     );
 
     if (loading) {
-        return <p style={{ textAlign: "center" }}>Đang tải giỏ hàng...</p>;
+        return <p style={{textAlign: "center"}}>Đang tải giỏ hàng...</p>;
     }
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Giỏ hàng</h1>
+
 
             {items.length === 0 ? (
                 <p>Giỏ hàng trống</p>
@@ -53,7 +53,7 @@ const Cart = () => {
                     <div className={styles.list}>
                         {items.map(item => (
                             <div key={item.id} className={styles.item}>
-                                <img src={item.image} alt={item.name} />
+                                <img src={item.image} alt={item.name}/>
 
                                 <div className={styles.info}>
                                     <h3>{item.name}</h3>
