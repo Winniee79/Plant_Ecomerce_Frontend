@@ -10,20 +10,79 @@ body {
     background-color: #f4fbf6;
 }
 /*1.BANNER*/
+.banner {
+    width: 100%;
+}
 .imgbanner {
     width: 100%;
     height: auto;
 }
+/*2. CONTENT*/
 .content {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 50px 0;
+}
+/*2.1 CHOICE*/
+.choiceSection {
+    margin-bottom: 60px;
 }
 
-/*3.PRODUCTS*/
+.choiceList {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.choiceItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.choiceItem img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ffffff;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+.choiceItem:hover img {
+    transform: scale(1.05);
+}
+
+.choiceItem span {
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+/*2.2.SẢN PHẨM MỚI*/
+.productSection {
+    margin-bottom: 100px;
+}
 .title {
     font-size: 28px;
     margin-bottom: 20px;
     text-align: center;
+}
+.sectionTitle {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: #2f2f2f;
+    margin-bottom: 8px;
+}
+
+.divider {
+    width: 180px;
+    height: 2px;
+    background-color: #2f2f2f;
+    margin: 0 auto 40px;
 }
 
 .productList {
