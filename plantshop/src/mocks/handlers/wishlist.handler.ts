@@ -1,10 +1,12 @@
 import { http, HttpResponse } from "msw";
-import wishlist from "../data/wishlist.json";
+import data from "../data/wishlist.json";
 
 export const wishlistHandlers = [
     // GET wishlist
     http.get("/plant/wishlist", () => {
-        return HttpResponse.json(wishlist);
+        return HttpResponse.json({
+            wishlist: data.wishlist
+        });
     }),
 
     // DELETE wishlist item
