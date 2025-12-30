@@ -9,5 +9,26 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
         return api.get("/products").then(res => res.data);
         // data là thuộc tính có sẵn của axios response
         // Chứa dữ liệu backend trả về
+    },
+    getNewProduct(): Promise<Product[]> {
+        return api.get("/new_products").then(res => res.data);
+    },
+    getTrendingProducts(): Promise<Product[]> {
+        return api.get("/trending_products").then(res => res.data);
+    },
+    getSaleProducts(): Promise<Product[]> {
+        return api.get("/sale_products").then(res => res.data);
+    },
+    getComboProducts(): Promise<Product[]> {
+        return api.get("/combo_products").then(res => res.data);
+    },
+    getWholesaleProducts(): Promise<Product[]> {
+        return api.get("/wholesale_products").then(res => res.data);
+    },
+    getSuppliesProducts(): Promise<Product[]> {
+        return api.get("/supplies_products").then(res => res.data);
+    },
+    getProductDetail(id: number): Promise<Product> {
+        return api.get(`/products/${id}`).then(res => res.data);
     }
 };
