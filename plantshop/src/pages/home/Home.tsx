@@ -4,7 +4,8 @@ import type { Product } from "../../types/product.type";
 // import Button from "../../components/common/Button";
 import styles from "./Home.module.css";
 import banner from "../../assets/images/banner.png"
-import ProductCard from "../../components/common/product/ProductCard";
+import ProductCard from "../../components/common/product/single/ProductCard";
+import ProductCardCombo from "../../components/common/product/combo/ProductCardCombo";
 import CayTrongImg from "../../assets/images/CayTrauBaDeVuong.jpg";
 import ChauCayImg from "../../assets/images/ChauCayDatNung.jpg";
 import ComboImg from "../../assets/images/CayPhuQuy.jpg";
@@ -27,6 +28,7 @@ const Home = () => {
     const [saleProducts, setSaleProducts] = useState<Product[]>([]);
     const [wholesaleProducts, setWholesaleProducts] = useState<Product[]>([]);
     const [suppliesProducts, setSuppliesProducts] = useState<Product[]>([]);
+    const [comboProducts, setComboProducts] = useState<Product[]>([]);
 
     // loading: trạng thái đang tải dữ liệu
     // Ban đầu là true → đang load
@@ -40,14 +42,21 @@ const Home = () => {
             productService.getSaleProducts(),
             productService.getWholesaleProducts(),
             productService.getSuppliesProducts(),
+            productService.getComboProducts(),
         ])
             // API trả về json sẽ lưu ds spham vào state products đã khai báo trước đó
-            .then(([newProds, trendingProds, salePros, wholesaleProds, suppliesProds]) => {
+            .then(([newProds, trendingProds, salePros, wholesaleProds, suppliesProds, comboProds]) => {
                 setNewProducts(newProds);
                 setTrendingProducts(trendingProds);
                 setSaleProducts(salePros);
                 setWholesaleProducts(wholesaleProds);
                 setSuppliesProducts(suppliesProds);
+                // Chuẩn hóa combo: lấy images từ comboItems, loại bỏ undefined
+                const comboWithImages = comboProds.map((cbp) => ({
+                    ...cbp,
+                    images: cbp.comboItems?.map((item) => item.image).filter((img): img is string => !!img) || [],
+                }));
+                setComboProducts(comboWithImages);
             })
             .finally(() => setLoading(false));  // dù api thành công hay thất bại thì quá trình load phải = false
     }, []);  // kết thúc quá trình loading
@@ -56,7 +65,7 @@ const Home = () => {
 
     //Trả về JSX - giao diện
     return (
-        <div className={styles.container}>    {/*styles.container là class CSS module*/}
+        <div className={styles.container}>
             {/*1.BANNER*/}
             <div className={styles.banner}>
                 <img src={banner} alt={banner} className={styles.imgbanner}/>
@@ -113,7 +122,7 @@ const Home = () => {
                             //         {formatPrice(product.price)}
                             //     </p>
                             // </div>
-                            <ProductCard key={np.id} product={np} />
+                            <ProductCard key={np.id} product={np} isNew={true} />
                         ))}
                     </div>
                 </section>
@@ -127,13 +136,13 @@ const Home = () => {
                             map → render nhiều card*/}
                         {trendingProducts.map(tp => (
                             // Mỗi sp là 1 card
-                            <ProductCard key={tp.id} product={tp} />
+                            <ProductCard key={tp.id} product={tp} isTrending={true}/>
                         ))}
                     </div>
                 </section>
                 {/*2.4 SẢN PHẨM GIẢM GIÁ*/}
                 <section className={styles.productSection}>
-                    <h2 className={styles.title}>🌱 Sản phẩm khuyến mãi</h2>
+                    <h2 className={styles.title}> Sản phẩm khuyến mãi</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
 
@@ -141,16 +150,22 @@ const Home = () => {
                             map → render nhiều card*/}
                         {saleProducts.map(sp => (
                             // Mỗi sp là 1 card
-                            <ProductCard key={sp.id} product={sp} />
+                            <ProductCard key={sp.id} product={sp} isSale={true} />
                         ))}
                     </div>
                 </section>
-                {/*2.5 COMBO HẤP DẪN*/}
-                <section>
-
+                {/* 2.5 COMBO HẤP DẪN */}
+                <section className={styles.productSection}>
+                    <h2 className={styles.title}>Combo hấp dẫn</h2>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productListCombo}>
+                        {comboProducts.map((cbp) => (
+                            <ProductCardCombo key={cbp.id} product={cbp} />
+                        ))}
+                    </div>
                 </section>
                 {/*2.6 CÂY GIỐNG*/}
-                <section>
+                <section className={styles.productSection}>
                     <h2 className={styles.title}>Ưu đãi giá sĩ cây giống</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>
@@ -164,7 +179,7 @@ const Home = () => {
                     </div>
                 </section>
                 {/*2.7 DỤNG CỤ */}
-                <section>
+                <section className={styles.productSection}>
                     <h2 className={styles.title}>Vật tư cây trồng</h2>
                     <div className={styles.divider}></div>
                     <div className={styles.productList}>

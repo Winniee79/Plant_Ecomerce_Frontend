@@ -91,6 +91,12 @@ body {
     gap: 20px;
     align-items: stretch;
 }
+.productListCombo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: stretch;
+}
 /*3.GIỚI THIỆU*/
 .introSection {
     padding: 50px 0;

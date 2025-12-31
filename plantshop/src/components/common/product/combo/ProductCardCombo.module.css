@@ -1,0 +1,149 @@
+.comboCard {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 350px;
+}
+
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-radius: 10px;
+    display: flex;
+}
+
+.singleImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.imageLeft,
+.imageRight {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imageLeft {
+    border-right: 1px solid #fff;
+}
+
+/* Nửa  trái */
+/*.imageLeft {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    object-fit: cover;*/
+/*    clip-path: polygon(0 0, 100% 0, 0 100%);*/
+/*    z-index: 1;*/
+/*}*/
+
+/*!* Nửa  phải *!*/
+/*.imageRight {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    object-fit: cover;*/
+/*    clip-path: polygon(100% 0, 100% 100%, 0 100%);*/
+/*    z-index: 0;*/
+/*}*/
+
+/* Đường chéo giữa */
+/*.diagonal {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 2px;*/
+/*    height: 100%;*/
+/*    background: linear-gradient(to bottom left, transparent calc(50% - 1px), #fff 50%, transparent calc(50% + 1px));*/
+/*    transform: rotate(45deg);*/
+/*    transform-origin: top left;*/
+/*}*/
+
+.name {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 10px;
+    line-height: 1;
+    height: 48px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;         /* giới hạn 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+/* Gạch trang trí ngay dưới tên */
+.name::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 4px;
+    background: #9fc73b;
+    border-radius: 2px;
+    margin: 20px auto 0;
+}
+
+.price {
+    font-size: 20px;
+    color: #444;
+    margin: 10px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.originalPrice {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 8px;
+}
+
+.salePrice {
+    color: #ff4757;
+    font-weight: bold;
+}
+
+.buyBtn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #3c7d3e;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.buyBtn:hover {
+    background: #2f6331;
+}
+/*zoom ảnh*/
+.singleImage,
+.imageLeft,
+.imageRight {
+    transition: transform 0.4s ease;
+}
+.imageLeft:hover,
+.imageRight:hover,
+.singleImage:hover {
+    transform: scale(1.3);
+}
