@@ -292,7 +292,7 @@
   {
     "id": 33,
     "name": "Chậu gốm sứ hình trụ họa tiết Geometric",
-    "price": 0,
+    "price": 80000,
     "image": "https://mowgarden.com/wp-content/uploads/2023/04/chau-su-hinh-tru-hoa-tiet-geo-1.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -301,7 +301,7 @@
   {
     "id": 34,
     "name": "Chậu Xi Măng Đá Mài Vuông Trọng Lượng Nhẹ",
-    "price": 0,
+    "price": 820000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/02/chau-xi-mang-da-mai-vuong-2.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -310,7 +310,7 @@
   {
     "id": 35,
     "name": "Chậu gốm trụ tròn ghép Mosaic ‘nhiệt đới’",
-    "price": 0,
+    "price": 200000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/11/chau-som-su-hoa-tiet-nhiet-doi-1.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -319,7 +319,7 @@
   {
     "id": 36,
     "name": "Chậu Nhựa Treo Monrovia Size L Màu Xanh",
-    "price": 0,
+    "price": 100000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/02/gio-treo-hoa-monrovia-2.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -328,7 +328,7 @@
   {
     "id": 37,
     "name": "Chậu đất nung wax xám họa tiết hoa",
-    "price": 0,
+    "price": 120000,
     "image": "https://mowgarden.com/wp-content/uploads/2023/03/chau-dat-nung-son-wax-1.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -337,7 +337,7 @@
   {
     "id": 39,
     "name": "Chậu đất nung quả bóng sơn nhám",
-    "price": 0,
+    "price": 100000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/11/chau-dat-nung-son-den-nham.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -346,7 +346,7 @@
   {
     "id": 40,
     "name": "Chậu đất nung để bàn gân sọc sơn bóng",
-    "price": 0,
+    "price": 60000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/09/chau-dat-nung-de-ban-son-den-1.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -355,7 +355,7 @@
   {
     "id": 41,
     "name": "Chậu gốm tráng men vân giả đá",
-    "price": 0,
+    "price": 180000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/10/chau-gom-su-trang-goc-doc-3.jpg",
     "type": "pot",
     "categoryId": 9,
@@ -447,7 +447,7 @@
     {
       "id": 39,
       "name": "Chậu đất nung quả bóng sơn nhám",
-      "price": 0,
+      "price": 100000,
       "image": "https://mowgarden.com/wp-content/uploads/2022/11/chau-dat-nung-son-den-nham.jpg",
       "type": "pot",
       "categoryId": 9,
@@ -708,5 +708,74 @@
       "categoryId": 6,
       "attributeIds": [60, 66]
     }
+  ],
+  "combo_products": [
+    {
+      "id": 48,
+      "name": "Combo Cây kim ngân + chậu sứ gấu BearBrick",
+      "price": 350000,
+      "type": "combo",
+      "categoryId": 11,
+      "attributeIds": [85, 86],
+      "comboItems": [
+        {
+          "productId": 46,
+          "name": "Cây kim ngân",
+          "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-kim-ngan-mot-than-co-thu-chau-su-3.jpg",
+          "quantity": 1
+        },
+        {
+          "productId": 47,
+          "name": "Chậu sứ gấu BearBrick",
+          "image": "https://mowgarden.com/wp-content/uploads/2023/07/cay-kim-ngan-3-than-mowgarden.jpg",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Combo Cây trầu bà thanh xuân cỡ lớn + chậu đá mài",
+      "price": 1200000,
+      "type": "combo",
+      "categoryId": 4,
+      "attributeIds": [23, 31,36,70,73,79,80],
+      "comboItems": [
+        {
+          "productId": 49,
+          "name": "Cây trầu bà",
+          "image": "https://mowgarden.com/wp-content/uploads/2022/08/trau-ba-thanh-xuan-chau-su-trang-2.jpg",
+          "quantity": 1
+        },
+        {
+          "productId": 47,
+          "name": "Chậu Xi Măng Đá Mài",
+          "image": "https://mowgarden.com/wp-content/uploads/2022/02/chau-xi-mang-da-mai-tron-ong-cao-30x50-1.jpg",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Combo Cây hạnh phúc để sàn 2 tầng + chậu sứ hoa văn",
+      "price": 900000,
+      "type": "combo",
+      "categoryId": 4,
+      "attributeIds": [23, 31,36,41,70,75,78],
+      "comboItems": [
+        {
+          "productId": 51,
+          "name": "Cây hạnh phúc",
+          "image": "https://mowgarden.com/wp-content/uploads/2022/10/cay-hanh-phuc-adermachera-Sinica.jpg",
+          "quantity": 1
+        },
+        {
+          "productId": 33,
+          "name": "Chậu gốm sứ hình trụ họa tiết Geometric",
+          "image": "https://mowgarden.com/wp-content/uploads/2023/04/chau-su-hinh-tru-hoa-tiet-geo-4.jpg",
+          "quantity": 1
+        }
+      ]
+    }
+
   ]
 }

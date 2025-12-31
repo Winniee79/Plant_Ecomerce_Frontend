@@ -1,14 +1,3 @@
-// export interface Product {
-//     id: number;
-//     name: string;
-//     price: number;
-//     image: string;
-//     category: string;
-// }
-/* =========================
-   PRODUCT BASE
-========================= */
-
 export type ProductType =
     | 'plant'
     | 'pot'
@@ -22,8 +11,16 @@ export interface Product {
     name: string;
     price: number;
     salePrice?: number | null;
-    image: string;
+    image?: string;
+    images?: string[];
     type: ProductType;
     categoryId: number;
     attributeIds: number[];
+        // sp combo
+    comboItems?: {
+        productId: number;
+        quantity: number;
+        name?: string;      // optional muốn hiển thị tên sp trong combo
+        image?: string;     // optional để hiển thị hình trong card combo
+    }[];
 }

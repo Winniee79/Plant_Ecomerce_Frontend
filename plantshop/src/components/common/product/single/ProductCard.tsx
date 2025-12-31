@@ -1,16 +1,22 @@
-import type { Product } from "../../../types/product.type.ts";
-import { formatPrice } from "../../../utils/formatPrice.ts";
+import type { Product } from "../../../../types/product.type.ts";
+import { formatPrice } from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
 
-type Props = { product: Product };
+type Props = { product: Product;
+                isNew?: boolean;     //Đánh dấu sp new
+                isSale?: boolean;
+                isTrending?: boolean;}; // Đánh dấu sp sale
 
-const ProductCard = ({ product }: Props) => {
+const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
     const salePrice = product.salePrice ?? null;
     const hasSale =
         typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
 
     return (
         <div className={styles.card}>
+            {isNew && <span className={styles.newBadge}>NEW</span>}
+            {isSale && hasSale && <span className={styles.saleBadge}>SALE</span>}
+            {isTrending && <span className={styles.trendingBadge}>TRENDING</span>}
             <img src={product.image}
                 alt={product.name}
                 className={styles.image}/>
