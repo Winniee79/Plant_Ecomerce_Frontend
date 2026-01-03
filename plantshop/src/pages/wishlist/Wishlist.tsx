@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Wishlist.module.css";
 import type { Product } from "../../types/product.type";
 import type { WishlistItem } from "../../types/wishlist.type";
+import { cartService } from "../../services/cart.service";
 
 const Wishlist = () => {
     const [items, setItems] = useState<WishlistItem[]>([]);
@@ -91,9 +92,22 @@ const Wishlist = () => {
                                     <button
                                         className={styles.addCart}
                                         disabled={product.stock === 0}
+                                        onClick={async () => {
+                                            try {
+                                                await cartService.addToCart(
+                                                    product.id,
+                                                    product.price,
+                                                    product.stock
+                                                );
+                                                alert("Đã thêm vào giỏ hàng");
+                                            } catch {
+                                                alert("Sản phẩm đã hết hàng");
+                                            }
+                                        }}
                                     >
                                         Thêm vào giỏ hàng
                                     </button>
+
                                 </div>
                             );
                         })}

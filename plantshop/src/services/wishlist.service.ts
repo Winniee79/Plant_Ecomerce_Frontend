@@ -9,3 +9,4 @@ export const getWishlist = async (): Promise<WishlistResponse> => {
 export const removeProductFromWishlist = async (productId: number) => {
     return api.delete(`/wishlist/${productId}`);
 };
+

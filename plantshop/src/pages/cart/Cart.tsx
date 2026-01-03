@@ -8,6 +8,18 @@ const Cart = () => {
     const [items, setItems] = useState<CartViewItem[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const handleChangeQty = async (itemId: number, newQty: number) => {
+        if (newQty < 1) return;
+
+        await cartService.updateQuantity(itemId, newQty);
+
+        const cart = await cartService.getActiveCart();
+        if (!cart) return;
+
+        const items = await cartService.getCartItems(cart.id);
+        setItems(items);
+    };
+
     useEffect(() => {
         async function loadCart() {
             const cart = await cartService.getActiveCart();
@@ -68,9 +80,23 @@ const Cart = () => {
                                     </div>
 
                                     <div className={styles.quantity}>
-                                        <Button variant="outline">-</Button>
+                                        <Button
+                                            variant="outline"
+                                            onClick={() =>
+                                                handleChangeQty(item.id, item.quantity - 1)}>
+                                            -
+                                        </Button>
+
                                         <span>{item.quantity}</span>
-                                        <Button variant="outline">+</Button>
+
+                                        <Button
+                                            variant="outline"
+                                            onClick={() =>
+                                                handleChangeQty(item.id, item.quantity + 1)
+                                            }
+                                        >
+                                            +
+                                        </Button>
                                     </div>
 
                                     <div className={styles.total}>
