@@ -135,3 +135,11 @@ input[type="range"] {
 .sliderThumb:hover {
     background-color: #2f6b30;
 }
+
+/* TYPE*/
+.typeList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 6px 12px;
+}

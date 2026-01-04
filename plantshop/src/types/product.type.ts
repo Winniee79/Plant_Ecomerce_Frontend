@@ -16,6 +16,7 @@ export interface Product {
     type: ProductType;
     categoryId: number;
     attributeIds: number[];
+    hasBulkPrice?: boolean;
         // sp combo
     comboItems?: {
         productId: number;

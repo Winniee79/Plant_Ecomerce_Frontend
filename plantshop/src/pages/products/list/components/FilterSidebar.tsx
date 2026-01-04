@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Category } from "../../../../types/category.type";
+import type { ProductType } from "../../../../types/product.type";
 import styles from "./FilterSidebar.module.css";
 import * as Slider from "@radix-ui/react-slider";
 
@@ -13,9 +14,21 @@ interface Props {
     //lọc theo giá
     priceRange: [number, number];
     onPriceChange: (range: [number, number]) => void;
+//  type
+    selectedType?: ProductType | "bulk";
+    onTypeChange: (type?: ProductType | "bulk") => void;
+
 }
 const MAX_PRICE = 1_000_000;
-
+// mapping
+const PRODUCT_TYPES: { value: ProductType | "bulk"; label: string }[] = [
+    { value: "plant", label: "Cây trồng" },
+    { value: "pot", label: "Chậu" },
+    { value: "seed", label: "Hạt giống" },
+    { value: "supplies", label: "Vật tư" },
+    { value: "combo", label: "Combo" },
+    { value: "bulk", label: "Giá sỉ" }
+];
 // SLIDE1: DANH MỤC
 const FilterSidebar = ({
                            categories,
@@ -25,6 +38,8 @@ const FilterSidebar = ({
                            onAttributeChange,
                            priceRange,
                            onPriceChange,
+                           onTypeChange,
+                           selectedType
                        }: Props) => {
     const [openCategoryIds, setOpenCategoryIds] = useState<number[]>([]);
 
@@ -44,21 +59,18 @@ const FilterSidebar = ({
                 {/*DANH MỤC*/}
                 {categories.map(category => (
                     <div key={category.id} className={styles.category}>
-                        <div
-                            className={`${styles.categoryHeader} ${
+                        <div className={`${styles.categoryHeader} ${
                                 selectedCategoryId === category.id ? styles.active : ""
                             }`}
                             onClick={() => {
                                 toggleCategory(category.id);
                                 onCategoryChange(category.id);
-                            }}
-                        >
+                            }}>
                             <span>{category.name}</span>
                             <span className={styles.arrow}>
               {openCategoryIds.includes(category.id) ? "⌄" : "›"}
             </span>
                         </div>
-
                         {openCategoryIds.includes(category.id) &&
                             category.attribute_groups.map(group => (
                                 <div key={group.group.id} className={styles.group}>
@@ -113,8 +125,7 @@ const FilterSidebar = ({
                             value={priceRange}
                             onValueChange={(value) =>
                                 onPriceChange([value[0], value[1]])
-                            }
-                        >
+                            }>
                             <Slider.Track className={styles.sliderTrack}>
                                 <Slider.Range className={styles.sliderRange} />
                             </Slider.Track>
@@ -124,6 +135,32 @@ const FilterSidebar = ({
                         </Slider.Root>
                     </div>
                 </div>
+            {/* FILTER TYPE */}
+            <div className={styles.filterbox}>
+                <h3 className={styles.title}>LOẠI SẢN PHẨM</h3>
+
+                <div className={styles.typeList}>
+                    {PRODUCT_TYPES.map(item => {
+                        const checked = selectedType === item.value;
+
+                        return (
+                            <label key={item.value}
+                                className={`${styles.typeItem} ${checked ? styles.checked : ""}`}>
+                                <input
+                                    type="radio"
+                                    name="product-type"
+                                    checked={checked}
+                                    onClick={() =>
+                                        onTypeChange(
+                                            checked ? undefined : item.value)
+                                } readOnly
+                                />
+                                <span>{item.label}</span>
+                            </label>
+                        );
+                    })}
+                </div>
+            </div>
 
         </aside>
     );

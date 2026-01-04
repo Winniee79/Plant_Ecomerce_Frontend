@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { productService } from "../../../services/product.service";
 import { categoryService } from "../../../services/category.service";
-import type { Product } from "../../../types/product.type";
+import type {Product, ProductType} from "../../../types/product.type";
 import type { Category } from "../../../types/category.type";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductCard from "../../../components/common/product/single/ProductCard";
+import ProductCardCombo from "../../../components/common/product/combo/ProductCardCombo";
 import styles from "./ProductList.module.css";
 import banner from "../../../assets/images/banner_shop.png"
 
-const MAX_PRICE = 1_000_000;
+const MAX_PRICE = 3_000_000;
 const ProductList = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
@@ -16,6 +17,7 @@ const ProductList = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
     const [selectedAttributes, setSelectedAttributes] = useState<Record<number, number>>({});
     const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
+    const [selectedType, setSelectedType] = useState<ProductType | "bulk">();
 
     // load data
     useEffect(() => {
@@ -29,7 +31,7 @@ const ProductList = () => {
         setSelectedAttributes({});
     };
 
-    // attribute
+    // attribute ( chọn 1 trong 1 group)
     const handleAttributeChange = (groupId: number, attrId: number) => {
         setSelectedAttributes(prev => {
             const next = { ...prev };
@@ -64,10 +66,18 @@ const ProductList = () => {
             ) {
                 return false;
             }
+            // type
+            if (selectedType) {
+                if (selectedType === "bulk") {
+                    if (!product.hasBulkPrice) return false;
+                } else {
+                    if (product.type !== selectedType) return false;
+                }
+            }
 
             return true;
         });
-    }, [products, selectedCategoryId, selectedAttributes, priceRange]);
+    }, [products, selectedCategoryId, selectedAttributes, priceRange, selectedType]);
 
     return (
         <div className={styles.container}>
@@ -85,17 +95,27 @@ const ProductList = () => {
                 onAttributeChange={handleAttributeChange}
                 priceRange={priceRange}
                 onPriceChange={setPriceRange}
+                selectedType={selectedType}
+                onTypeChange={setSelectedType}
             />
             {/*3. right: ds products*/}
             <div className={styles.content}>
                 {filteredProducts.length === 0 ? (
                     <p className={styles.empty}>Không tìm thấy sản phẩm phù hợp</p>
                 ) : (
+                    <>
+                    <h2 className={styles.productListTitle}>Danh sách sản phẩm</h2>
                 <div className={styles.grid}>
-                    {filteredProducts.map(product => (
-                        <ProductCard key={product.id} product={product} />
+                    {filteredProducts.map(product =>
+                        product.type === "combo" ? (
+                            <div key={product.id} className={styles.comboItem}>
+                                <ProductCardCombo product={product} />
+                            </div>
+                        ) : (
+                            <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
+                    </>
                 )}
             </div>
         </div>

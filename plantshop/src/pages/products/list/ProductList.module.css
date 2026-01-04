@@ -20,16 +20,33 @@ body {
 /*2.*/
 .wrapper {
     display: flex;
-    gap: 24px;
+    gap: 50px;
     padding: 24px;
 }
 
 .content {
     flex: 1;
 }
+.productListTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #3b823e;
+}
 
+.empty {
+    font-size: 1.2rem;
+    color: #3b823e;
+    text-align: center;
+}
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
+.comboGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
