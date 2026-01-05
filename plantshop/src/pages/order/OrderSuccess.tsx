@@ -1,5 +1,7 @@
 import styles from "./OrderSuccess.module.css";
 import { Link, useLocation, Navigate } from "react-router-dom";
+import { useEffect,useRef } from "react";
+import { saveOrder } from "../../utils/orderStorage";
 
 const ORDER_STEPS = [
     "Đã đặt hàng",
@@ -21,7 +23,30 @@ const OrderSuccess = () => {
     const location = useLocation();
     const state = location.state as OrderState | null;
 
-    // User gõ URL trực tiếp
+    const hasSaved = useRef(false);
+    useEffect(() => {
+        if (!state || hasSaved.current) return;
+
+        hasSaved.current = true; // chặn StrictMode
+
+        saveOrder({
+            user_id: null,
+            recipient_name: "Khách hàng",
+            recipient_phone: "0000000000",
+            full_address: state.address,
+            payment_method_id:
+                state.paymentMethod === "Thanh toán Online" ? 1 : 2,
+            payment_status: "paid",
+            subtotal: state.total,
+            shipping_fee: 0,
+            discount_amount: 0,
+            total_amount: state.total,
+            status: "pending",
+            created_at: new Date().toISOString(),
+        });
+    }, [state]);
+
+
     if (!state) {
         return <Navigate to="/" replace />;
     }
