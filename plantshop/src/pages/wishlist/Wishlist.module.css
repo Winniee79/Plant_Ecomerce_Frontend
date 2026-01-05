@@ -135,8 +135,9 @@ body {
 }
 
 .addCart:hover {
-    text-decoration: underline;
+    text-decoration: none;
     color: #336F38;
+    background-color: white;
 }
 
 .tableWrapper {

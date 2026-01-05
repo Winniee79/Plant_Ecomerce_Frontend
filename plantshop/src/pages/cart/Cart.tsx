@@ -1,50 +1,24 @@
-import { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
 import Button from "../../components/common/Button";
-import type { CartViewItem } from "../../types/cart.type";
-import { cartService } from "../../services/cart.service";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../../store";
+import { updateQuantity, removeFromCart, } from "../../store/cartSlice";
 
 const Cart = () => {
-    const [items, setItems] = useState<CartViewItem[]>([]);
-    const [loading, setLoading] = useState(true);
+    const items = useSelector((state: RootState) => state.cart.items);
+    const dispatch = useDispatch();
 
-    const handleChangeQty = async (itemId: number, newQty: number) => {
-        if (newQty < 1) return;
-
-        await cartService.updateQuantity(itemId, newQty);
-
-        const cart = await cartService.getActiveCart();
-        if (!cart) return;
-
-        const items = await cartService.getCartItems(cart.id);
-        setItems(items);
+    // Xử lý thay đổi số lượng sản phẩm
+    const handleChangeQty = (productId: number, qty: number) => {
+        if (qty < 1) return;
+        dispatch(updateQuantity({ productId, quantity: qty }));
     };
 
-    useEffect(() => {
-        async function loadCart() {
-            const cart = await cartService.getActiveCart();
-            if (!cart) {
-                setItems([]);
-                setLoading(false);
-                return;
-            }
-
-            const items = await cartService.getCartItems(cart.id);
-            setItems(items);
-            setLoading(false);
-        }
-
-        loadCart();
-    }, []);
-
+    // Tính tổng tiền tạm tính
     const subtotal = items.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
     );
-
-    if (loading) {
-        return <p style={{ textAlign: "center" }}>Đang tải giỏ hàng...</p>;
-    }
 
     return (
         <div className={styles.container}>
@@ -52,9 +26,8 @@ const Cart = () => {
                 <b>GIỎ HÀNG</b> <span>›</span> THANH TOÁN <span>›</span> HOÀN THÀNH
             </h1>
 
-            {items.length === 0 ? (
-                <p>Giỏ hàng trống</p>
-            ) : (
+            {/* giỏ hàng trống */}
+            {items.length === 0 ? (<p>Giỏ hàng trống</p>) : (
                 <>
                     <div className={styles.tableWrapper}>
                         <div className={styles.table}>
@@ -68,37 +41,30 @@ const Cart = () => {
 
                             {items.map(item => (
                                 <div key={item.id} className={styles.row}>
-                                    <button className={styles.removeBtn}>✕</button>
+                                    <button className={styles.removeBtn} onClick={() => dispatch(removeFromCart(item.productId))}> ✕ </button>
 
+                                    {/* Tên sản phẩm */}
                                     <div className={styles.product}>
                                         <img src={item.image} alt={item.name} />
                                         <span>{item.name}</span>
                                     </div>
 
+                                    {/* Giá sản phẩm */}
                                     <div className={styles.price}>
                                         {item.price.toLocaleString()}₫
                                     </div>
 
+                                    {/* Điều chỉnh số lượng */}
                                     <div className={styles.quantity}>
-                                        <Button
-                                            variant="outline"
-                                            onClick={() =>
-                                                handleChangeQty(item.id, item.quantity - 1)}>
-                                            -
-                                        </Button>
+                                        <Button onClick={() => handleChangeQty(item.productId, item.quantity - 1)}>-</Button>
 
-                                        <span>{item.quantity}</span>
-
-                                        <Button
-                                            variant="outline"
-                                            onClick={() =>
-                                                handleChangeQty(item.id, item.quantity + 1)
-                                            }
-                                        >
-                                            +
-                                        </Button>
+                                        {/* HIỂN THỊ SỐ LƯỢNG */}
+                                        <span className={styles.qtyValue}>{item.quantity}</span>
+                                        <Button onClick={() => handleChangeQty(item.productId, item.quantity + 1)}>+</Button>
                                     </div>
 
+
+                                    {/* Tổng tiền của sản phẩm */}
                                     <div className={styles.total}>
                                         {(item.price * item.quantity).toLocaleString()}₫
                                     </div>
@@ -107,6 +73,7 @@ const Cart = () => {
                         </div>
                     </div>
 
+                    {/* Tổng kết giỏ hàng */}
                     <div className={styles.summary}>
                         <div>
                             <h3>Tạm tính</h3>

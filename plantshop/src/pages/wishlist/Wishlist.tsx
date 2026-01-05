@@ -2,16 +2,25 @@ import { useEffect, useState } from "react";
 import styles from "./Wishlist.module.css";
 import type { Product } from "../../types/product.type";
 import type { WishlistItem } from "../../types/wishlist.type";
-import { cartService } from "../../services/cart.service";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
+
 
 const Wishlist = () => {
+    // Danh sách wishlist
     const [items, setItems] = useState<WishlistItem[]>([]);
+    // Danh sách toàn bộ sản phẩm
     const [products, setProducts] = useState<Product[]>([]);
+    // Trạng thái loading
     const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
 
+    // Load wishlist và product khi vào trang
     useEffect(() => {
         Promise.all([
+            // Lấy wishlist
             fetch("/plant/wishlist").then(res => res.json()),
+            // Lấy danh sách sản phẩm
             fetch("/plant/products").then(res => res.json())
         ])
             .then(([wishlistData, productData]) => {
@@ -21,11 +30,15 @@ const Wishlist = () => {
             .finally(() => setLoading(false));
     }, []);
 
+    // Xóa sản phẩm khỏi wishlist
     const handleRemove = async (productId: number) => {
+        // Gọi API xóa wishlist
         await fetch(`/plant/wishlist/${productId}`, { method: "DELETE" });
+        // Cập nhật UI sau khi xóa
         setItems(prev => prev.filter(i => i.product_id !== productId));
     };
 
+    // Hiển thị khi đang loading
     if (loading) {
         return <div className={styles.container}>Đang tải...</div>;
     }
@@ -34,6 +47,7 @@ const Wishlist = () => {
         <div className={styles.container}>
             <h1 className={styles.title}>Sản phẩm yêu thích</h1>
 
+            {/* Wishlist trống */}
             {items.length === 0 ? (
                 <p className={styles.empty}>Danh sách yêu thích trống</p>
             ) : (
@@ -65,6 +79,7 @@ const Wishlist = () => {
                                         ✕
                                     </button>
 
+                                    {/* Tên sản phẩm */}
                                     <div className={styles.product}>
                                         <img
                                             src={product.image}
@@ -73,10 +88,12 @@ const Wishlist = () => {
                                         <span>{product.name}</span>
                                     </div>
 
+                                    {/* Giá sản phẩm */}
                                     <div className={styles.price}>
                                         {product.price.toLocaleString()}đ
                                     </div>
 
+                                    {/* Trạng thái tồn kho */}
                                     <div
                                         className={
                                             product.stock > 0
@@ -89,17 +106,23 @@ const Wishlist = () => {
                                             : "Hết hàng"}
                                     </div>
 
+                                    {/* Thêm sản phẩm vào giỏ hàng */}
                                     <button
                                         className={styles.addCart}
                                         disabled={product.stock === 0}
                                         onClick={async () => {
                                             try {
-                                                await cartService.addToCart(
-                                                    product.id,
-                                                    product.price,
-                                                    product.stock
-                                                );
+                                                dispatch(addToCart({
+                                                    id: Date.now(),
+                                                    productId: product.id,
+                                                    name: product.name,
+                                                    image: product.image,
+                                                    price: product.price,
+                                                    quantity: 1,
+                                                }));
+
                                                 alert("Đã thêm vào giỏ hàng");
+
                                             } catch {
                                                 alert("Sản phẩm đã hết hàng");
                                             }
