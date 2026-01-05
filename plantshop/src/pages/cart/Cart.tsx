@@ -3,10 +3,12 @@ import Button from "../../components/common/Button";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../store";
 import { updateQuantity, removeFromCart, } from "../../store/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const items = useSelector((state: RootState) => state.cart.items);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // Xử lý thay đổi số lượng sản phẩm
     const handleChangeQty = (productId: number, qty: number) => {
@@ -81,7 +83,9 @@ const Cart = () => {
                                 {subtotal.toLocaleString()}₫
                             </p>
                         </div>
-                        <Button>Thanh toán</Button>
+                        <Button onClick={() => navigate("/checkout")}>
+                            Thanh toán
+                        </Button>
                     </div>
                 </>
             )}

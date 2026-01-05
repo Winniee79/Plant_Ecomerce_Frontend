@@ -32,9 +32,7 @@ const Wishlist = () => {
 
     // Xóa sản phẩm khỏi wishlist
     const handleRemove = async (productId: number) => {
-        // Gọi API xóa wishlist
         await fetch(`/plant/wishlist/${productId}`, { method: "DELETE" });
-        // Cập nhật UI sau khi xóa
         setItems(prev => prev.filter(i => i.product_id !== productId));
     };
 

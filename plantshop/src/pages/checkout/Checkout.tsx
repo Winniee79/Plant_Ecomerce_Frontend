@@ -1,5 +1,8 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import styles from "./Checkout.module.css";
+import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import type {RootState} from "../../store";
 
 const SHIPPING_FEE = 50000;
 
@@ -17,8 +20,7 @@ const COUPONS: CouponRule[] = [
 ];
 
 const Checkout = () => {
-    const productTotal = 750000;
-
+    const navigate = useNavigate();
     const [payment, setPayment] = useState<"bank" | "cod" | "wallet">("bank");
     const [superPack, setSuperPack] = useState(false);
     const [substrate, setSubstrate] = useState(false);
@@ -30,6 +32,13 @@ const Checkout = () => {
 
     const superPackFee = superPack ? 30000 : 0;
     const substrateFee = substrate ? 25000 : 0;
+
+    const cartItems = useSelector((state: RootState) => state.cart.items);
+
+    const productTotal = cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
 
     const applyCoupon = () => {
         const code = couponInput.trim().toUpperCase();
@@ -67,7 +76,27 @@ const Checkout = () => {
         finalShipping +
         superPackFee +
         substrateFee;
-
+    useEffect(() => {
+        if (cartItems.length === 0) {
+            navigate("/carts");
+        }
+    }, [cartItems, navigate]);
+    const handleOrder = () => {
+        navigate("/order_success", {
+            state: {
+                orderId: "ORD-" + Date.now(),
+                total,
+                paymentMethod:
+                    payment === "cod"
+                        ? "Thanh toán khi nhận hàng (COD)"
+                        : payment === "bank"
+                            ? "Thanh toán Online"
+                            : "Ví điện tử",
+                address: "TP. Hồ Chí Minh",
+                currentStep: 0,
+            },
+        });
+    };
     return (
         <div className={styles.page}>
             <h1 className={styles.breadcrumb}>
@@ -229,9 +258,14 @@ const Checkout = () => {
                         Tôi đã đọc và đồng ý điều khoản
                     </label>
 
-                    <button className={styles.orderBtn} disabled={!agree}>
+                    <button
+                        className={styles.orderBtn}
+                        disabled={!agree}
+                        onClick={handleOrder}
+                    >
                         ĐẶT HÀNG
                     </button>
+
 
                     <div className={styles.freeshipInfo}>
                         <h4>MÃ GIẢM GIÁ</h4>
