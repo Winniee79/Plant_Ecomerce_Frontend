@@ -25,7 +25,7 @@ const Cart = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.breadcrumb}>
-                <b>GIỎ HÀNG</b> <span>›</span> THANH TOÁN <span>›</span> HOÀN THÀNH
+                <b>GIỎ HÀNG</b>
             </h1>
 
             {/* giỏ hàng trống */}

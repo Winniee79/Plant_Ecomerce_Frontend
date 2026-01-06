@@ -79,9 +79,7 @@ const Header = () => {
 
                                     <div className={styles.dropdownItem}>
                                         <i className="fa-solid fa-box" />
-                                        <Link to="/orders" className={styles.orderLink}>
-                                            Đơn mua
-                                        </Link>
+                                        <span>Đơn mua</span>
                                     </div>
 
                                     <div className={styles.divider} />

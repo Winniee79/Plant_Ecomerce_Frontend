@@ -1,0 +1,20 @@
+{
+  "wards": [
+    { "id": 1, "name": "Phường Bến Nghé", "code": "BN", "district_id": 1 },
+    { "id": 2, "name": "Phường Bến Thành", "code": "BT", "district_id": 1 },
+    { "id": 3, "name": "Phường Võ Thị Sáu", "code": "VTS", "district_id": 2 },
+    { "id": 4, "name": "Phường Phạm Ngũ Lão", "code": "PNL", "district_id": 2 },
+    { "id": 5, "name": "Phường 1", "code": "P1", "district_id": 3 },
+    { "id": 6, "name": "Phường 2", "code": "P2", "district_id": 3 },
+    { "id": 7, "name": "Phường Linh Trung", "code": "LT", "district_id": 4 },
+    { "id": 8, "name": "Phường Hiệp Bình Chánh", "code": "HBC", "district_id": 4 },
+
+    { "id": 9, "name": "Phường Hàng Bài", "code": "HB", "district_id": 5 },
+    { "id": 10, "name": "Phường Hàng Trống", "code": "HT", "district_id": 5 },
+    { "id": 11, "name": "Phường Phúc Xá", "code": "PX", "district_id": 6 },
+    { "id": 12, "name": "Phường Trúc Bạch", "code": "TB", "district_id": 6 },
+
+    { "id": 13, "name": "Phường Thạch Thang", "code": "TT", "district_id": 7 },
+    { "id": 14, "name": "Phường Hải Châu 1", "code": "HC1", "district_id": 7 }
+  ]
+}
