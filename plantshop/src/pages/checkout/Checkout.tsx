@@ -3,21 +3,17 @@ import styles from "./Checkout.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
-
-// MOCK DATA (province + ward)
 import provincesData from "../../mocks/data/provinces.json";
 import wardsData from "../../mocks/data/wards.json";
-
-// UTILS
 import { mapToCheckoutCart } from "../../utils/mapCheckoutCart";
 import { useShippingFee } from "../../hooks/useShippingFee";
+import CheckoutPaymentFlow from "../../pages/payment/CheckoutPaymentFlow";
 
-//COUPON TYPE + DATA
-
+// COUPON TYPE + DATA
 type CouponRule = {
     code: string;
-    min: number;        // giá trị đơn tối thiểu
-    discount: number;   // số tiền giảm
+    min: number; // giá trị đơn tối thiểu
+    discount: number; // số tiền giảm
 };
 
 const COUPONS: CouponRule[] = [
@@ -29,68 +25,35 @@ const COUPONS: CouponRule[] = [
 
 const Checkout = () => {
     const navigate = useNavigate();
-
-
-//CART FROM REDUX
-     
     const cartItems = useSelector((state: RootState) => state.cart.items);
 
-
-//FORM STATE
-     
+    // FORM STATE
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [formError, setFormError] = useState("");
 
-
-//OPTIONS
-     
     const [payment, setPayment] = useState<"bank" | "cod" | "wallet">("bank");
     const [superPack, setSuperPack] = useState(false);
     const [substrate, setSubstrate] = useState(false);
     const [agree, setAgree] = useState(false);
 
-
-//ADDRESS (PROVINCE + WARD)
-     
     const [provinceId, setProvinceId] = useState<number | "">("");
     const [wardId, setWardId] = useState<number | "">("");
 
     const provinces = provincesData.provinces;
+    const wards = wardsData.wards.filter((w) => w.province_id === provinceId);
 
-    // Lọc ward theo province đã chọn
-    const wards = wardsData.wards.filter(
-        (w) => w.province_id === provinceId
-    );
-
-
-//COUPON STATE
-     
     const [couponInput, setCouponInput] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState<CouponRule | null>(null);
     const [couponError, setCouponError] = useState("");
 
-
-//MAP CART + SHIPPING
-     
-    const checkoutCart = useMemo(
-        () => mapToCheckoutCart(cartItems),
-        [cartItems]
+    const checkoutCart = useMemo(() => mapToCheckoutCart(cartItems), [cartItems]);
+    const { shippingFee, totalWeight, needContact, zone, isTruck } = useShippingFee(
+        provinceId,
+        checkoutCart
     );
 
-    // Tính phí ship theo province + tổng weight
-    const {
-        shippingFee,
-        totalWeight,
-        needContact,
-        zone,
-        isTruck,
-    } = useShippingFee(provinceId, checkoutCart);
-
-
-//SAVE SHIPPING INFO
-     
     useEffect(() => {
         localStorage.setItem(
             "checkout_shipping",
@@ -98,9 +61,6 @@ const Checkout = () => {
         );
     }, [shippingFee, totalWeight, provinceId]);
 
-
-//FEES CALCULATION
-     
     const superPackFee = superPack ? 30_000 : 0;
     const substrateFee = substrate ? 25_000 : 0;
 
@@ -109,27 +69,16 @@ const Checkout = () => {
         0
     );
 
-    const shippingDiscount = appliedCoupon
-        ? Math.min(appliedCoupon.discount, shippingFee)
-        : 0;
-
+    const shippingDiscount = appliedCoupon ? Math.min(appliedCoupon.discount, shippingFee) : 0;
     const finalShipping = Math.max(0, shippingFee - shippingDiscount);
+    const total = productTotal + finalShipping + superPackFee + substrateFee;
 
-    const total =
-        productTotal + finalShipping + superPackFee + substrateFee;
-
-
-//GUARD: CART EMPTY
-     
     useEffect(() => {
         if (cartItems.length === 0) {
             navigate("/carts");
         }
     }, [cartItems, navigate]);
 
-
-//COUPON HANDLERS
-     
     const applyCoupon = () => {
         const code = couponInput.trim().toUpperCase();
         const rule = COUPONS.find((c) => c.code === code);
@@ -141,9 +90,7 @@ const Checkout = () => {
         }
 
         if (productTotal < rule.min) {
-            setCouponError(
-                `Đơn hàng chưa đạt ${rule.min.toLocaleString()}₫`
-            );
+            setCouponError(`Đơn hàng chưa đạt ${rule.min.toLocaleString()}₫`);
             setAppliedCoupon(null);
             return;
         }
@@ -157,35 +104,24 @@ const Checkout = () => {
         setCouponInput("");
     };
 
-
-//ORDER SUBMIT
-     
     const handleOrder = () => {
-        // Validate form cơ bản
         if (!fullName || !phone || !email) {
             setFormError("Vui lòng nhập đầy đủ thông tin");
             return;
         }
 
-        // Validate địa chỉ
         if (!provinceId || !wardId) {
             setFormError("Vui lòng chọn tỉnh/thành và xã/phường");
             return;
         }
 
-        // Khu vực đặc biệt
         if (needContact) {
             alert("Khu vực này cần liên hệ để báo phí vận chuyển");
             return;
         }
 
-        const province = provinces.find(
-            (p) => p.id === provinceId
-        )?.name;
-
-        const ward = wardsData.wards.find(
-            (w) => w.id === wardId
-        )?.name;
+        const province = provinces.find((p) => p.id === provinceId)?.name;
+        const ward = wardsData.wards.find((w) => w.id === wardId)?.name;
 
         navigate("/order_success", {
             state: {
@@ -206,19 +142,16 @@ const Checkout = () => {
         });
     };
 
-
-//RENDER
-     
-
     return (
         <div className={styles.page}>
             <h1 className={styles.breadcrumb}>
-                 <b>THANH TOÁN</b>
+                <b>THANH TOÁN</b>
             </h1>
 
             <div className={styles.layout}>
                 {/* LEFT */}
                 <div className={styles.left}>
+                    {/* Coupon */}
                     <div className={styles.coupon}>
                         <input
                             value={couponInput}
@@ -227,10 +160,13 @@ const Checkout = () => {
                         />
                         <button onClick={applyCoupon}>Áp dụng</button>
                     </div>
-                    {couponError && <p style={{color: "red", fontSize: 13}}>{couponError}</p>}
+                    {couponError && (
+                        <p style={{ color: "red", fontSize: 13 }}>{couponError}</p>
+                    )}
+
+                    {/* Cart preview */}
                     <div className={styles.cartPreview}>
                         <h3 className={styles.sectionTitle}>SẢN PHẨM ĐÃ CHỌN</h3>
-
                         {checkoutCart.map((item) => (
                             <div key={item.id} className={styles.cartItem}>
                                 <div className={styles.cartInfo}>
@@ -239,13 +175,11 @@ const Checkout = () => {
                                         {item.quantity} × {item.price.toLocaleString()}₫
                                     </p>
                                 </div>
-
                                 <div className={styles.cartPrice}>
                                     {(item.price * item.quantity).toLocaleString()}₫
                                 </div>
                             </div>
                         ))}
-
                         <div className={styles.cartTotalRow}>
                             <span>Tạm tính</span>
                             <span>{productTotal.toLocaleString()}₫</span>
@@ -255,10 +189,21 @@ const Checkout = () => {
                     <h2 className={styles.sectionTitle}>THANH TOÁN & VẬN CHUYỂN</h2>
 
                     <div className={styles.formGrid}>
-                        <input placeholder="Họ và tên *" value={fullName}
-                               onChange={(e) => setFullName(e.target.value)}/>
-                        <input placeholder="Số điện thoại *" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-                        <input placeholder="Email *" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <input
+                            placeholder="Họ và tên *"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                        />
+                        <input
+                            placeholder="Số điện thoại *"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                        />
+                        <input
+                            placeholder="Email *"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
 
                         <select
                             value={provinceId}
@@ -288,15 +233,23 @@ const Checkout = () => {
                             ))}
                         </select>
 
-                        <input className={styles.full} placeholder="Địa chỉ (Ví dụ: Số 20, ngõ 90)"/>
+                        <input
+                            className={styles.full}
+                            placeholder="Địa chỉ (Ví dụ: Số 20, ngõ 90)"
+                        />
                     </div>
 
-                    {formError && <p style={{color: "red", fontSize: 13}}>{formError}</p>}
+                    {formError && <p style={{ color: "red", fontSize: 13 }}>{formError}</p>}
 
+                    {/* Add-on options */}
                     <h3 className={styles.subTitle}>Gói đóng gói & mua thêm</h3>
 
                     <label className={styles.option}>
-                        <input type="checkbox" checked={superPack} onChange={() => setSuperPack(!superPack)}/>
+                        <input
+                            type="checkbox"
+                            checked={superPack}
+                            onChange={() => setSuperPack(!superPack)}
+                        />
                         <div>
                             <b>Gói “Siêu bảo vệ”</b> (+30.000₫)
                             <p>Đóng gói chống sốc, giữ ẩm an toàn cho cây sống</p>
@@ -304,44 +257,61 @@ const Checkout = () => {
                     </label>
 
                     <label className={styles.option}>
-                        <input type="checkbox" checked={substrate} onChange={() => setSubstrate(!substrate)}/>
+                        <input
+                            type="checkbox"
+                            checked={substrate}
+                            onChange={() => setSubstrate(!substrate)}
+                        />
                         <div>
                             <b>Giá thể / Bình giữ ẩm</b> (+25.000₫)
                             <p>Hỗ trợ cây khỏe khi vận chuyển xa</p>
                         </div>
                     </label>
 
-                    <textarea className={styles.note} placeholder="Ghi chú cho đơn hàng (không bắt buộc)"/>
+                    <textarea
+                        className={styles.note}
+                        placeholder="Ghi chú cho đơn hàng (không bắt buộc)"
+                    />
                 </div>
 
                 {/* RIGHT */}
                 <div className={styles.right}>
+                    {/* Order summary */}
                     <div className={styles.summary}>
                         <h3 className={styles.sectionTitle}>ĐƠN HÀNG CỦA BẠN</h3>
-
                         <div className={styles.row}>
                             <span>Tạm tính</span>
                             <span>{productTotal.toLocaleString()}₫</span>
                         </div>
-
                         <div className={styles.row}>
                             <span>Giao hàng ({zone ?? "Chưa chọn"})</span>
                             <span>{shippingFee.toLocaleString()}₫</span>
                         </div>
 
-                        {needContact && <div style={{color: "red", fontSize: 13}}>Vui lòng liên hệ để báo phí</div>}
-                        {isTruck &&
-                            <div style={{fontSize: 14, color: "#3c7d3e", marginBottom: 5}}>Đơn hàng lớn, vận chuyển bằng xe
-                                tải</div>}
+                        {needContact && (
+                            <div style={{ color: "red", fontSize: 13 }}>
+                                Vui lòng liên hệ để báo phí
+                            </div>
+                        )}
+                        {isTruck && (
+                            <div
+                                style={{ fontSize: 14, color: "#3c7d3e", marginBottom: 5 }}
+                            >
+                                Đơn hàng lớn, vận chuyển bằng xe tải
+                            </div>
+                        )}
 
                         {appliedCoupon && (
                             <div className={styles.rowDiscount}>
-                <span>
-                  Coupon: {appliedCoupon.code}
-                    <button onClick={removeCoupon} style={{marginLeft: 8, fontSize: 12}}>
-                    [Remove]
-                  </button>
-                </span>
+                                <span>
+                                    Mã giảm giá: {appliedCoupon.code}
+                                    <button
+                                        onClick={removeCoupon}
+                                        style={{ marginLeft: 8, fontSize: 12 }}
+                                    >
+                                        [Remove]
+                                    </button>
+                                </span>
                                 <span>-{shippingDiscount.toLocaleString()}₫</span>
                             </div>
                         )}
@@ -370,31 +340,59 @@ const Checkout = () => {
                     <div className={styles.payment}>
                         <h3 className={styles.sectionTitle}>PHƯƠNG THỨC THANH TOÁN</h3>
                         <label>
-                            <input type="radio" checked={payment === "bank"} onChange={() => setPayment("bank")}/>
+                            <input
+                                type="radio"
+                                checked={payment === "bank"}
+                                onChange={() => setPayment("bank")}
+                            />
                             Thanh toán Online
                         </label>
                         <label>
-                            <input type="radio" checked={payment === "cod"} onChange={() => setPayment("cod")}/>
+                            <input
+                                type="radio"
+                                checked={payment === "cod"}
+                                onChange={() => setPayment("cod")}
+                            />
                             Thanh toán khi nhận hàng (COD)
                         </label>
                         <label>
-                            <input type="radio" checked={payment === "wallet"} onChange={() => setPayment("wallet")}/>
+                            <input
+                                type="radio"
+                                checked={payment === "wallet"}
+                                onChange={() => setPayment("wallet")}
+                            />
                             Ví điện tử
                         </label>
-                        {payment === "cod" &&
-                            <p style={{fontSize: 13, color: "#555"}}>Bạn sẽ thanh toán khi nhận hàng</p>}
+
+                        {(payment === "bank" || payment === "wallet") && (
+                            <CheckoutPaymentFlow payment={payment} />
+                        )}
+
+                        {payment === "cod" && (
+                            <p style={{ fontSize: 13, color: "#555" }}>
+                                Bạn sẽ thanh toán khi nhận hàng
+                            </p>
+                        )}
                     </div>
 
                     <label className={styles.agree}>
-                        <input type="checkbox" checked={agree} onChange={() => setAgree(!agree)}/>
+                        <input
+                            type="checkbox"
+                            checked={agree}
+                            onChange={() => setAgree(!agree)}
+                        />
                         Tôi đã đọc và đồng ý điều khoản
                     </label>
 
-                    <button className={styles.orderBtn} disabled={!agree} onClick={handleOrder}>
+                    <button
+                        className={styles.orderBtn}
+                        disabled={!agree}
+                        onClick={handleOrder}
+                    >
                         ĐẶT HÀNG
                     </button>
 
-                    {/* COUPON INFO */}
+                    {/* Coupon info */}
                     <div className={styles.freeshipInfo}>
                         <h4>MÃ GIẢM GIÁ</h4>
                         <ul>
