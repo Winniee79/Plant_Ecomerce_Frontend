@@ -3,6 +3,7 @@
   {
     "id": 1,
     "name": "Cây lựu ta đỏ chậu ươm FRUI020",
+    "slug": "cay-luu-ta-do",
     "price": 160000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden.jpg",
     "type": "plant",
@@ -13,6 +14,7 @@
   {
     "id": 2,
     "name": "Cây chanh cẩm thạch chậu ươm FRUI005",
+    "slug": "cay-chanh-cam-thach",
     "price": 250000,
     "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-chanh-cam-thach-1.jpg",
     "type": "plant",
@@ -23,6 +25,7 @@
   {
     "id": 3,
     "name": "Chuối Tiêu Hồng",
+    "slug": "chuoi-tieu-hong",
     "price": 15000,
     "image": "https://tse3.mm.bing.net/th/id/OIP.18LeEcUGZpH9ZFBqPEk5DQHaHa?pid=Api&P=0&h=220",
     "type": "plant",
@@ -33,6 +36,7 @@
   {
     "id": 4,
     "name": "Cà Chua Bi Đỏ",
+    "slug": "ca-chua-bi-do",
     "price": 25000,
     "image": "https://ivila.vn/public/uploads/media/image/ca-chua-bi-lun-do21_1.jpg",
     "type": "plant",
@@ -43,6 +47,7 @@
   {
     "id": 5,
     "name": "Cây Bạch Đàn Uro",
+    "slug": "cay-bach-dan-uro",
     "price": 12000,
     "image": "https://bizweb.dktcdn.net/100/277/395/files/cay-bach-dan-decor-dep.jpg?v=1726718156275",
     "type": "plant",
@@ -63,6 +68,7 @@
   {
     "id": 7,
     "name": "Cây Keo Lai Nuôi Cấy Mô",
+    "slug": "cay-keo-lai",
     "price": 15000,
     "image": "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-cay-keo-dau-inkythuatso-31-09-07-26.jpg",
     "type": "plant",

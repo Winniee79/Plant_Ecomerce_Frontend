@@ -1,5 +1,6 @@
 import { api } from "./api";
 import type { Product } from "../types/product.type";
+import type { ProductDetail } from "../types/productdetail.type";
 
 //Khai báo
 export const productService = { // tự đăt để gom các hàm liên quan đến API
@@ -28,7 +29,7 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
     getSuppliesProducts(): Promise<Product[]> {
         return api.get("/supplies_products").then(res => res.data);
     },
-    getProductDetail(id: number): Promise<Product> {
+    getProductDetail(id: number): Promise<ProductDetail> {
         return api.get(`/products/${id}`).then(res => res.data);
     }
 };

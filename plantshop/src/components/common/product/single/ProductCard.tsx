@@ -1,6 +1,7 @@
 import type { Product } from "../../../../types/product.type.ts";
 import { formatPrice } from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
+import {Link} from "react-router-dom";
 
 type Props = { product: Product;
                 isNew?: boolean;     //Đánh dấu sp new
@@ -17,11 +18,12 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
             {isNew && <span className={styles.newBadge}>NEW</span>}
             {isSale && hasSale && <span className={styles.saleBadge}>SALE</span>}
             {isTrending && <span className={styles.trendingBadge}>TRENDING</span>}
+            <Link to={`/products/${product.id}`}>
             <img src={product.image}
                 alt={product.name}
                 className={styles.image}/>
             <h3 className={styles.name}>{product.name}</h3>
-
+            </Link>
             <p className={styles.price}>
                 {hasSale ? (
                     <>
@@ -38,7 +40,6 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
           </span>
                 )}
             </p>
-
             <button className={styles.buyBtn}>Mua ngay</button>
         </div>
     );
