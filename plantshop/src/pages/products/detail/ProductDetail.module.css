@@ -1,0 +1,381 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4fbf6;
+}
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 10px 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f4fbf6;
+}
+
+.main {
+    display: flex;
+    gap: 50px;
+}
+
+/* SẢN PHẨM */
+.gallery {
+    flex: 1;
+}
+.mainImage {
+    width: 100%;
+    border-radius: 10px;
+    height: 500px;
+}
+.thumbnailList {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+.thumbnailList img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 6px;
+    opacity: 0.8;
+}
+.thumbnailList img.active {
+    opacity: 1;
+    border: 2px solid #3b7f3b;
+}
+
+/* Info */
+.info {
+    max-width: 520px;
+    color: #1f3d2b;
+}
+.title {
+    font-size: 36px;
+    line-height: 1.2;
+    font-weight: 600;
+    margin: 50px 0 20px 0;
+}
+.titleLine {
+    width: 100px;
+    height: 4px;
+    background: #f0c040;
+    margin-bottom: 30px;
+}
+.price {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0a8a43;
+    margin-bottom: 20px;
+}
+.desc {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+.category {
+    padding: 10px;
+    background-color: #ffffff;
+    border: #1f3d2b solid 1px;
+    border-radius: 10px;
+}
+.buyRow {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+.quantityBox {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.quantityBox button {
+    width: 45px;
+    height: 45px;
+    background: #f5f5f5;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+.quantityBox input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    font-size: 18px;
+}
+.btnCart {
+    background: #0a8a43;
+    color: #fff;
+    border: none;
+    padding: 14px 35px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+/* TAB GIỚI THIỆU */
+.productTabs {
+    margin-top: 60px;
+    background: #506B52;
+    padding: 40px 50px;
+    border-radius: 14px;
+}
+
+/* Title "Giới thiệu" */
+.productTabs .titleTab {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.productTabs .titleTab .productTitle {
+    display: inline-block;
+    font-size: 32px;
+    font-weight: 600;
+    color: #F0F5F0;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+/* Gạch vàng dưới title */
+.productTabs .titleTab .productTitle::after {
+    content: "";
+    width: 200px;
+    height: 4px;
+    background: #f0c040;
+    display: block;
+    margin-top: 12px;
+}
+
+/* Bảng thông tin */
+.productTabs .productSpecs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    border-top: none !important;
+    background: transparent;
+}
+
+/* Mỗi bảng */
+.productTabs .productSpecs > div {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px 30px;
+}
+
+
+/* Mỗi dòng thông tin */
+.productTabs .specRow {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    padding: 18px 0;
+    border-bottom: 1px solid #e6e6e6;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.productTabs .specRow:last-child {
+    border-bottom: none;
+}
+/*.product-tabs .spec-row span:first-child {*/
+/*    font-weight: 700;*/
+/*    color: #1f3d2b;*/
+/*    letter-spacing: 0.4px;*/
+/*}*/
+
+.productTabs .specRow span:last-child {
+    color: #3f5a4c;
+}
+
+/*Bảng giá sĩ */
+.tabContentPrice {
+    width: 100%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px 32px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+/*Title*/
+.tabContentPrice .titleTab {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.tabContentPrice .titleTab .productTitle {
+    display: inline-block;
+    font-size: 32px;
+    font-weight: 600;
+    color: #01370C;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+/* Gạch vàng dưới title */
+.tabContentPrice .titleTab .productTitle::after {
+    content: "";
+    width: 200px;
+    height: 4px;
+    background: #f0c040;
+    display: block;
+    margin-top: 12px;
+}
+/*cột*/
+.specTablePrice {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e6e6e6;
+}
+/*mỗi dòng giá*/
+.specTablePrice .specRow {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 18px 24px;
+    font-size: 17px;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.specTablePrice .specRow:last-child {
+    border-bottom: none;
+}
+/*cột trái*/
+.specTablePrice .specRow span:first-child {
+    font-weight: 600;
+    color: #2e4d3a;
+}
+/*cột phải*/
+.specTablePrice .specRow span:last-child {
+    font-weight: 700;
+    color: #0a8a43;
+    font-size: 18px;
+}
+.specTablePrice .specRow span:last-child {
+    font-weight: 700;
+    color: #0a8a43;
+    font-size: 18px;
+}
+.specTablePrice .specRow:hover {
+    background: #f4fbf7;
+}
+.priceTabs {
+    width: 800px;
+    display: flex;
+    justify-content: center;
+    margin: 60px auto;
+}
+/*CÁC TAB: MÔ TẢ, ĐẶC ĐIỂM, CHĂM SÓC/TRỒNG*/
+.productAccordion {
+    margin-top: 50px;
+}
+
+/* mỗi item */
+.accordionItem {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    margin: 10px 0;
+}
+
+/* header */
+.accordionHeader {
+    width: 100%;
+    background: #ffffff;
+    border: none;
+    padding: 20px 20px 0px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f3d2b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: justify-content 0.4s ease;
+}
+.accordionHeader:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* chữ khi đóng */
+.accordionTitle {
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.4s ease;
+}
+
+
+/* icon mũi tên */
+.accordionIcon {
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid #1f3d2b;
+    border-bottom: 2px solid #1f3d2b;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+.accordionItem.active {
+    border: none;
+}
+
+/* style chữ khi mở */
+.accordionItem.active .accordionTitle {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    margin: 0 auto;
+}
+/* gạch vàng  */
+.accordionItem.active .accordionTitle::after {
+    content: "";
+    display: block;
+    width: 200px;
+    height: 4px;
+    background: #f4c84c;
+    margin: 12px auto 0;
+    border-radius: 2px;
+}
+
+/* khi mở */
+.accordionItem.active .accordionIcon {
+    transform: rotate(-135deg);
+}
+
+/* content  */
+.accordionContent {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: #ffffff;
+    margin: 10px;
+}
+
+/* mở content */
+.accordionItem.active .accordionContent {
+    max-height: 1000px;
+}
+
+/* layout bên trong */
+.markdown {
+    display: block;
+    padding: 10px 40px 30px;
+    font-size: 16px;
+    line-height: 1.2;
+    color: #2f4f3e;
+}
+
+.markdownParagraph {
+    margin-bottom: 18px;
+}
+
+.markdownImage {
+    display: block;
+    margin: 30px auto;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+
+
