@@ -19,6 +19,7 @@ Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng 
 - npm install @reduxjs/toolkit react-redux
 - npm install react @types/react @types/react-dom --save-dev
 - npm install @radix-ui/react-slider
+- npm i react-markdown
 
 ---------------------------------------------------------------------------------------------
 

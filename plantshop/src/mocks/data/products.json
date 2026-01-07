@@ -4,65 +4,74 @@
       "id": 1,
       "slug": "cay-luu-ta-do",
       "name": "Cây lựu ta đỏ chậu ươm",
-      "sku": "FRUI020",
+      "description": "Những quả lựu căng đỏ tựa như những chiếc lồng đèn mang lại cho gia chủ sự may mắn, tài lộc trong cuộc sống.Những quả lựu căng đỏ tựa như những chiếc lồng đèn mang lại cho gia chủ sự may mắn, tài lộc trong cuộc sống.",
       "type": "plant",
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden.jpg",
       "price": 160000,
-      "sale_price": 140000,
+      "salePrice": 140000,
       "stock": 50,
       "status": "active",
-
       "category": {
         "id": 2,
-        "name": "Cây ăn quả"
+        "name": "Cây ăn quả",
+        "slug": "cay-an-qua"
       },
 
       "attributes": [
-        { "group": "Theo Phương Pháp", "id": 2, "name": "Cây Chiết Cành" },
-        { "group": "Theo Đặc Tính", "id": 6, "name": "Chịu Hạn & Mặn" },
-        { "group": "Theo Đặc Tính", "id": 8, "name": "Ưa Nắng Toàn Phần" }
+        { "group": "Theo Phương Pháp", "id": 2, "name": "Cây Chiết Cành", "slug": "chiet-canh" },
+        { "group": "Theo Đặc Tính", "id": 6, "name": "Chịu Hạn & Mặn", "slug": "chiu-han-man" },
+        { "group": "Theo Đặc Tính", "id": 8, "name": "Ưa Nắng Toàn Phần", "slug": "ua-nang" }
       ],
 
       "dimensions": {
         "weight": "1.5 kg",
-        "pot_width": "25 cm",
-        "pot_height": "22 cm",
-        "total_height": "80–100 cm",
-        "canopy_width": "40–50 cm"
+        "potWidth": "25 cm",
+        "potHeight": "22 cm",
+        "totalHeight": "80–100 cm",
+        "canopyWidth": "40–50 cm"
       },
 
       "images": [
         {
+          "id": 39,
+          "url": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden.jpg",
+          "order": 0
+        },
+        {
           "id": 40,
           "url": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden1.jpg",
-          "is_main": true,
-          "order": 0
+          "order": 1
         },
         {
           "id": 41,
           "url": "https://mowgarden.com/wp-content/uploads/2022/09/luutadomowgarden2.jpg",
-          "is_main": false,
-          "order": 1
+          "order": 2
+        },
+        {
+          "id": 42,
+          "url": "https://caycanh4mua.com/UserFile/Product/cay-luu-do.jpg",
+          "order": 3
         }
       ],
 
-      "wholesale_prices": [
+      "wholesalePrices": [
         { "min": 1, "max": 9, "price": 160000 },
         { "min": 10, "max": 49, "price": 140000 },
         { "min": 50, "max": null, "price": 110000 }
       ],
 
-      "plant_detail": {
-        "common_name": "Lựu ta đỏ",
-        "scientific_name": "Punica granatum L.",
-        "difficulty": "easy",
+      "plantDetail": {
+        "commonName": "Lựu ta đỏ",
+        "scientificName": "Punica granatum L.",
+        "difficulty": "Dễ chăm sóc",
         "light": "Nắng trực tiếp",
         "water": "Tưới nước 1 lần/ngày"
       },
 
-      "content": {
-        "description_markdown": "## Cây lựu ta đỏ\n\nCây lựu ta đỏ là giống cây ăn trái truyền thống, được trồng phổ biến tại Việt Nam.",
-        "features_markdown": "- 🌿 Dễ trồng\n- 🍎 Trái đỏ, nhiều nước",
-        "care_guide_markdown": "- Ưa nắng\n- Tưới nước đều"
+      "infor": {
+        "content": "## Cây lựu ta đỏ\n\nCây lựu ta đỏ là giống cây ăn trái truyền thống, được trồng phổ biến tại Việt Nam nhờ khả năng thích nghi tốt và cho trái đẹp.\n\n\n\n![Cây lựu ta đỏ](https://monhasfarm.com/wp-content/uploads/2025/09/cach-trong-cay-luu-1.jpg)\n\n\n\nLựu không chỉ mang ý nghĩa phong thủy may mắn mà còn cho quả giàu vitamin, tốt cho sức khỏe.\n\n\n\nCây có thể trồng trong chậu hoặc trồng đất, phù hợp với sân vườn, ban công, sân thượng.\n",
+        "features": "### Đặc điểm nổi bật\n\n- \uD83C\uDF3F Cây sinh trưởng khỏe, dễ trồng\n\n- \uD83C\uDF38 Hoa màu đỏ cam, nở đẹp\n\n- \uD83C\uDF4E Trái to, vỏ đỏ, hạt mọng nước\n\n- ⏱\uFE0F Thời gian cho trái: 8–12 tháng\n\n- \uD83E\uDEB4 Phù hợp trồng chậu hoặc trồng đất\n\n\n\n![Quả lựu ta đỏ](https://vuonhungthinh.com/wp-content/uploads/2023/10/san-pham-cay-luu-do-an-do-2.webp)\n",
+        "careGuide": "## Chuẩn bị trồng\n\n- Đất tơi xốp, thoát nước tốt (đất thịt pha trấu, xơ dừa)\n\n- Chậu có lỗ thoát nước nếu trồng chậu\n\n\n\n## Cách trồng\n\n1. Đặt cây con vào giữa chậu hoặc hố trồng\n\n2. Lấp đất vừa kín bầu rễ, nén nhẹ\n\n3. Tưới đẫm nước sau khi trồng\n\n\n\n![Cây lựu ta đỏ](https://thaocaygiong.com/wp-content/uploads/2023/10/cach-trong-luu-do-an-do.jpg)\n\n\n\n## Chăm sóc\n\n- **Ánh sáng:** Ưa nắng, nên trồng nơi có nắng trực tiếp 6–8 giờ/ngày\n\n- **Tưới nước:** 2–3 lần/tuần, tránh ngập úng\n\n- **Bón phân:** Phân hữu cơ hoặc NPK định kỳ mỗi tháng\n\n\n\n## Lưu ý\n\n- Cắt tỉa cành già để cây thông thoáng\n\n- Phòng trừ sâu bệnh định kỳ, đặc biệt vào mùa mưa\n"
       }
     },
 
