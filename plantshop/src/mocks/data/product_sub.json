@@ -877,6 +877,135 @@
         }
       ]
     }
-
+  ],
+  "relate_products": [
+    {
+      "id": 12,
+      "name": "Cây Tràm Gió",
+      "slug": "cay-tram-gio",
+      "price": 120000,
+      "image": "https://nguyentuanhung.vn/wp-content/uploads/2020/07/loi-ich-suc-khoe-cua-tinh-dau-tram-gio-o9jniums8cd0jcxb2faqdziju7rsb7ycl0e7o7reec.jpg",
+      "type": "plant",
+      "categoryId": 3,
+      "attributeIds": [15, 18, 21],
+      "hasBulkPrice": true
+    },
+    {
+      "id": 13,
+      "name": "Cây bàng Singapore",
+      "slug": "cay-bang-singapore",
+      "price": 550000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/11/cay-bang-singapore-lon-chau-xi-mang-da-mai.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [23, 31, 36, 41],
+      "hasBulkPrice": true
+    },
+    {
+      "id": 17,
+      "name": "Cây ngũ gia bì xanh",
+      "slug": "cay-ngu-bi-xanh",
+      "price": 165000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-ngu-gia-bi-xanh-de-ban-chau-men-su.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [27, 36, 41, 42]
+    },
+    {
+      "id": 7,
+      "name": "Cây Keo Lai Nuôi Cấy Mô",
+      "slug": "cay-keo-lai",
+      "price": 15000,
+      "image": "https://inkythuatso.com/uploads/thumbnails/800/2023/03/1-hinh-anh-cay-keo-dau-inkythuatso-31-09-07-26.jpg",
+      "type": "plant",
+      "categoryId": 3,
+      "attributeIds": [14, 15, 18, 20, 22],
+      "hasBulkPrice": true
+    },
+    {
+      "id": 8,
+      "name": "Cây Bồ Đề",
+      "slug": "cay-bo-de",
+      "price": 50000,
+      "image": "https://phuongtrunggreen.com/resource/gellary/images/Cay-Cong-Trinh/cay-bo-de-6a.jpg",
+      "type": "plant",
+      "categoryId": 3,
+      "attributeIds": [14, 17, 20],
+      "hasBulkPrice": true
+    },
+    {
+      "id": 12,
+      "name": "Cây Tràm Gió",
+      "slug": "cay-tram-gio",
+      "price": 120000,
+      "image": "https://nguyentuanhung.vn/wp-content/uploads/2020/07/loi-ich-suc-khoe-cua-tinh-dau-tram-gio-o9jniums8cd0jcxb2faqdziju7rsb7ycl0e7o7reec.jpg",
+      "type": "plant",
+      "categoryId": 3,
+      "attributeIds": [15, 18, 21],
+      "hasBulkPrice": true
+    },
+    {
+      "id": 16,
+      "name": "Cây Chuông Vàng",
+      "slug": "cay-chuong-vang",
+      "price": 1650000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/04/cay-chuong-vang-1.jpg",
+      "type": "plant",
+      "categoryId": 4,
+      "attributeIds": [24, 26, 31, 37, 38],
+      "hasBulkPrice": true
+    },
+    {
+      "id": 2,
+      "name": "Cây chanh cẩm thạch chậu ươm FRUI005",
+      "slug": "cay-chanh-cam-thach",
+      "price": 250000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/cay-chanh-cam-thach-1.jpg",
+      "type": "plant",
+      "categoryId": 2,
+      "attributeIds": [2, 6, 8, 12, 13]
+    }
+  ],
+  "suggest_supplies": [
+    {
+      "id": 40,
+      "name": "Chậu đất nung để bàn gân sọc sơn bóng",
+      "slug": "chau-dat-nung-de-ban-gan-soc-son-bong",
+      "price": 60000,
+      "image": "https://mowgarden.com/wp-content/uploads/2022/09/chau-dat-nung-de-ban-son-den-1.jpg",
+      "type": "pot",
+      "categoryId": 9,
+      "attributeIds": [70, 74, 77]
+    },
+    {
+      "id": 42,
+      "name": "Phân rơm ủ hoai hữu cơ",
+      "slug": "phan-rom-u-hoai-huu-co",
+      "price": 250000,
+      "image": "https://mowgarden.com/wp-content/uploads/2021/05/phan-rom-hoai-muc-1.jpg",
+      "type": "seed",
+      "categoryId": 8,
+      "attributeIds": [59]
+    },
+    {
+      "id": 44,
+      "name": "Đất trồng cây hữu cơ cao cấp",
+      "slug": "dat-trong-cay-huu-co-cao-cap",
+      "price": 180000,
+      "image": "https://tse2.mm.bing.net/th/id/OIP.EMLMqm006Pub-W9zolm6cwHaHa?pid=Api&P=0&h=220",
+      "type": "supplies",
+      "categoryId": 7,
+      "attributeIds": [61]
+    },
+    {
+      "id": 45,
+      "name": "Thuốc trừ sâu sinh học Neem",
+      "slug": "thuoc-tru-sau-sinh-hoc-neem",
+      "price": 66000,
+      "image": "https://skyfarm.vn/uploads/Thuy-canh/thuoc-tru-sau-sinh-hoc-neem-nano-chinh-hang-1.jpg",
+      "type": "supplies",
+      "categoryId": 6,
+      "attributeIds": [60, 66]
+    }
   ]
 }

@@ -1,4 +1,4 @@
-import data from "../data/home.json";
+import data from "../data/product_sub.json";
 import datapro from "../data/products.json";
 import { http, HttpResponse } from "msw"; //hàm có sẵn của thư viện MSW
 
@@ -31,15 +31,48 @@ export const productHandlers = [
     http.get("/api/combo_products", () => {
         return HttpResponse.json(data.combo_products);
     }),
-    http.get("/api/products/:id", (req) => {
-        const id = Number(req.params.id);
-        const product = datapro.products.find(p => p.id === id);
+    // http.get("/api/products/:id", (req) => {
+    //     const id = Number(req.params.id);
+    //     const product = datapro.products.find(p => p.id === id);
+    //     if (!product) {
+    //         return HttpResponse.json(
+    //             { message: "Product not found" },
+    //             { status: 404 }
+    //         );
+    //     }
+    //     return HttpResponse.json(product);
+    // })
+    http.get("/api/products/:slug", ({ params }) => {
+        const slug = params.slug as string;
+        const product = datapro.products.find(
+            p => p.slug === slug);
         if (!product) {
-            return HttpResponse.json(
-                { message: "Product not found" },
-                { status: 404 }
-            );
+            return new HttpResponse(null, { status: 404 });
         }
         return HttpResponse.json(product);
+    }),
+    // Lọc trong danh sách
+    // http.get("/api/products/:slug/related", ({ params }) => {
+    //     const slug = params.slug as string;
+    //     const currentproduct = datapro.products.find(p => p.slug === slug);
+    //     if (!currentproduct) {
+    //         return new HttpResponse(null, {status: 404});
+    //     }
+    //     const relatedProducts = datapro.products
+    //         .filter(p =>
+    //             p.slug !== slug &&
+    //             p.category.id === currentproduct.category.id
+    //         )
+    //         .slice(0, 6);
+    //     return HttpResponse.json(relatedProducts);
+    // }),
+    // JSON Sản phâmr tương tự
+    http.get("/api/products/:slug/related", () => {
+        return HttpResponse.json(data.relate_products);
+    }),
+    // JSON vật tư gợi ý đi kèm
+    http.get("/api/products/:slug/accessories", () => {
+        return HttpResponse.json(data.suggest_supplies);
     })
+
 ];

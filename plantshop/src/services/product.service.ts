@@ -31,5 +31,16 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
     },
     getProductDetail(id: number): Promise<ProductDetail> {
         return api.get(`/products/${id}`).then(res => res.data);
+    },
+    getProductDetailSlug(slug: string) : Promise<ProductDetail> {
+        return api.get(`/products/${slug}`).then(res => res.data);
+    },
+    getRelatedProducts(slug: string): Promise<ProductDetail[]> {
+        return api.get(`/products/${slug}/related`).then(res => res.data);
+    },
+    getSuggestSupplies(slug: string): Promise<ProductDetail[]> {
+        return api.get(`/products/${slug}/accessories`).then(res => res.data);
     }
+
+
 };

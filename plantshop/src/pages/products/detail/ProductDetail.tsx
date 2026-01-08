@@ -1,37 +1,63 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { productService } from "../../../services/product.service";
 import type { ProductDetail, ProductImage } from "../../../types/productdetail.type";
 import styles from "./ProductDetail.module.css";
 import { formatPrice } from "../../../utils/formatPrice";
 import ReactMarkdown from "react-markdown";
+import ProductCard from "../../../components/common/product/single/ProductCard.tsx";
 
 const Productdetail = () => {
-    const { id } = useParams<{ id: string }>();
+    // const { id } = useParams<{ id: string }>();
+    const { slug } = useParams<{ slug: string }>();
     const [product, setProduct] = useState<ProductDetail | null>(null);
     const [mainImage, setMainImage] = useState<string>("");
     const [quantity, setQuantity] = useState<number>(1);
     const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
-    //const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [relatedProducts, setRelatedProducts] = useState<ProductDetail[]>([]);
+    const [suggestSupplies, setSuggestSupplies] = useState<ProductDetail[]>([]);
 
     useEffect(() => {
-        if (id) {
-            productService.getProductDetail(Number(id)).then(p => {
-                setProduct(p);
-                setMainImage(p.images?.[0].url ?? "");
-            });
-        }
-    }, [id]);
+            if (!slug) return;
+                productService.getProductDetailSlug(slug).then(p => {
+                    setProduct(p);
+                    setMainImage(p.images?.[0].url ?? "");
 
-    const changeMainImage = (img: ProductImage) => {
+                    // load favorite from localStorage
+                    const fav = localStorage.getItem(`favorite-${slug}`);
+                    setIsFavorite(!!fav);
+                });
+                productService.getRelatedProducts(slug).then(setRelatedProducts);
+                productService.getSuggestSupplies(slug).then(setSuggestSupplies);
+
+        }, [slug]);
+
+        const changeMainImage = (img: ProductImage) => {
         setMainImage(img.url);
     };
 
     const toggleAccordion = (index: number) => {
         setActiveAccordion(prev => (prev === index ? null : index));
     };
+    // Lưu sp yêu thích vào local storage
+    const toggleFavorite = () => {
+        setIsFavorite(prev => {
+            const next = !prev;
 
+            if (next) {
+                localStorage.setItem(`favorite-${slug}`, "1");
+            } else {
+                localStorage.removeItem(`favorite-${slug}`);
+            }
+
+            return next;
+        });
+    };
     if (!product) return <div>Loading...</div>;
+
+    const salePrice = product.salePrice ?? null;
+    const hasSale = typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
 
     const categoryTags = [
         product.category?.name,
@@ -62,19 +88,32 @@ const Productdetail = () => {
                         <h1 className={styles.title}>{product.name}</h1>
                         <div className={styles.titleLine}></div>
                         <div className={styles.price}>
-                            {formatPrice(product.price)}
-                            {/*{product.salePrice ?? product.price}đ*/}
+                            {hasSale ? (
+                                <>
+                                <span className={styles.originalPrice}>
+                                {formatPrice(product.price)}
+                                 </span>
+                                    <span className={styles.salePrice}>
+                                    {formatPrice(salePrice as number)}
+                                    </span>
+                                </>
+                            ) : (
+                                <span className={styles.onlyPrice}>
+                                {formatPrice(product.price)}
+                                 </span>
+                            )}
                         </div>
+
+                        <div className={styles.description}>
                         <p className={styles.desc}>{product.description}</p>
+                        </div>
                         {/*<div className={styles.category}>*/}
                         {/*    <p><strong>Danh mục: </strong>{product.category.name}</p>*/}
                         {/*</div>*/}
-                        <div className={styles.category}>
                             <p>
                                 <strong>Danh mục: </strong>
                                 {categoryTags.join(", ")}
                             </p>
-                        </div>
                         <div className={styles.buyRow}>
                             <div className={styles.quantityBox}>
                                 <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>-</button>
@@ -82,6 +121,13 @@ const Productdetail = () => {
                                 <button onClick={() => setQuantity(q => q + 1)}>+</button>
                             </div>
                             <button className={styles.btnCart}>THÊM GIỎ HÀNG</button>
+                            <i
+                                onClick={toggleFavorite}
+                                className={`fa-solid fa-heart ${styles.heartIcon} ${
+                                    isFavorite ? styles.active : ""
+                                }`}
+                            />
+
                         </div>
                     </div>
                 </div>
@@ -257,6 +303,88 @@ const Productdetail = () => {
                 </div>
             </div>
         </div>
+        {/*    DANH SÁCH SẢN PHẨM*/}
+            <div className={styles.relatedproduct}>
+                {relatedProducts.length > 0 && (
+                <div className={styles.relatedSection}>
+                    <h3 className={styles.title}>🌳 Gợi ý cho không gian của bạn</h3>
+                    <div className={styles.divider}></div>
+                    <div className={styles.productList}>
+                        {relatedProducts.map(p => (
+                            <ProductCard key={p.id} product={p} />
+                        ))}
+                    </div>
+                </div>
+                    )}
+            </div>
+        {/*    GỢI Ý VẬT TƯ ĐI KÈM*/}
+            <div className={styles.relatedproduct}>
+                {suggestSupplies.length > 0 && (
+                    <div className={styles.relatedSection}>
+                        <h3 className={styles.title}>Gợi ý vật tư thêm cho sản phẩm </h3>
+                        <div className={styles.divider}></div>
+                        <div className={styles.productList}>
+                            {suggestSupplies.map(s => (
+                                <ProductCard key={s.id} product={s} />
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+            {/* CHÍNH SÁCH ĐỔI TRẢ */}
+            <div className={styles.policySection}>
+                <div className={styles.policyHeader}>
+                    <span className={styles.line}></span>
+                    <h2>CHÍNH SÁCH ĐỔI TRẢ</h2>
+                    <span className={styles.line}></span>
+                </div>
+
+                <p className={styles.policyIntro}>
+                    <strong>Plant A Plant </strong> Garden muốn mang đến trải nghiệm mua sắm tuyệt vời nhất tới khách hàng của mình.
+                    Chính vì vậy mà tất cả các sản phẩm được mua  tại <strong>Plant A Plant </strong> đều sẽ được đảm bảo chất lượng trước khi tới tay khách hàng. Hy vọng rằng bạn sẽ không chỉ hài lòng về sản phẩm mà về chất lượng phục vụ.
+                    Nếu có bất kì vấn đề nào gặp phải, bạn hãy liên hệ ngay với <strong>Plant A Plant </strong> để được giải quyết nhé.
+                </p>
+
+                <div className={styles.policyGrid}>
+                    <div className={styles.policyItem}>
+                        <h4>Sản phẩm không phải là cây</h4>
+                        <p>
+                            Đối với các mặt hàng <strong>không phải là cây xanh </strong>,
+                            quý khách hoàn toàn có thể đổi trả <strong>trong vòng 30 ngày</strong> kể từ ngày nhận được hàng,
+                            nếu như sản phẩm gặp phải vấn đề lỗi từ nhà sản xuất.
+                        </p>
+                    </div>
+
+                    <div className={styles.policyItem}>
+                        <h4>Đối với cây có kích thước nhỏ</h4>
+                        <p>
+                            Tất cả những loại cây xanh có kích thước nhỏ (dưới 100cm) sẽ được <strong>Plant A Plant </strong> bảo hành <strong>trong vòng 30 ngày</strong>.
+                            Nếu như cây mà bạn nhận được gặp phải vấn đề suy yếu không thể hồi phục thì hay liên hệ ngay để được đổi cây mới.
+                        </p>
+                    </div>
+
+                    <div className={styles.policyItem}>
+                        <h4>Đối với cây lớn trên 100cm</h4>
+                        <p>
+                            Đối với những loại cây xanh có kích thước lớn <strong>trên 100cm</strong>,
+                            khi được giao tới mà bị các vấn đề <strong>hư hại, héo rủ</strong> hoặc <strong>suy yếu</strong>,
+                            quý khách vui lòng liên hệ ngay với <strong>Plant A Plant </strong> để được đổi cây mới <strong>trong vòng 7 ngày</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <div className={styles.policyFooter}>
+                    <p className={styles.policyIntro}>
+                        Để thực hiện đổi trả, quý khách có thể liên hệ với <strong>Plant A Plant </strong>
+                        thông qua số hotline hoặc email để được tư vấn hỗ trợ đổi trả:
+                    </p>
+                    <p>
+                        📞 Hotline: <strong>0838 369 639</strong> – <strong>09 6688 9393</strong> <br />
+                        ✉️ Email: <strong>hotro@plantaplant.com</strong>
+                    </p>
+                </div>
+            </div>
+
         </div>
     );
 };
