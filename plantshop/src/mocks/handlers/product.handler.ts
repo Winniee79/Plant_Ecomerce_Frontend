@@ -1,12 +1,13 @@
 import data from "../data/product_sub.json";
 import datapro from "../data/products.json";
 import { http, HttpResponse } from "msw"; //hàm có sẵn của thư viện MSW
+import { normalize } from "../../utils/normalize";
 
 export const productHandlers = [
     //GET API
-    http.get("/api/products", () => {
-        return HttpResponse.json(data.products); //Trả về response dạng JSON
-    }),
+    // http.get("/api/products", () => {
+    //     return HttpResponse.json(data.products); //Trả về response dạng JSON
+    // }),
     // GET /plant/new_products      => trả mảng sp moi
     http.get("/api/new_products", () => {
         return HttpResponse.json(data.new_products);
@@ -73,6 +74,29 @@ export const productHandlers = [
     // JSON vật tư gợi ý đi kèm
     http.get("/api/products/:slug/accessories", () => {
         return HttpResponse.json(data.suggest_supplies);
-    })
+    }),
+//     Tìm kiếm
+    http.get("/api/products", ({ request }) => {
+        const url = new URL(request.url);
+        const search = url.searchParams.get("search")?.toLowerCase();
+        // Không có search → trả tất cả
+        if (!search) {
+            return HttpResponse.json(data.products);
+        }
+        // Có search → lọc theo tên
+        const keyword = normalize(search);
+        const filteredProducts = data.products.filter(p => {
+        const name = normalize(p.name);
+        const slug = normalize(p.slug ?? "");
+        return (
+            name.includes(keyword) ||
+            slug.includes(keyword)
+        );
+    });
+
+return HttpResponse.json(filteredProducts);
+    }),
+
+
 
 ];

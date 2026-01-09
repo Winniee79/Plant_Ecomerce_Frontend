@@ -39,7 +39,13 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
     },
     getSuggestSupplies(slug: string): Promise<ProductDetail[]> {
         return api.get(`/products/${slug}/accessories`).then(res => res.data);
+    },
+    // getSearchProducts(query: string): Promise<ProductDetail[]> {
+    //     return api.get(`/products/${query}`).then(res => res.data);
+    // },
+//     Tìm kiếm
+    getSearchProducts(query: string) {
+        return api.get("/products", {params: { search: query }}).then(res => res.data);
     }
-
 
 };

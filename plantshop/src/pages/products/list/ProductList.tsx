@@ -8,6 +8,7 @@ import ProductCard from "../../../components/common/product/single/ProductCard";
 import ProductCardCombo from "../../../components/common/product/combo/ProductCardCombo";
 import styles from "./ProductList.module.css";
 import banner from "../../../assets/images/banner_shop.png"
+import { useSearchParams } from "react-router-dom";
 
 const MAX_PRICE = 3_000_000;
 const ProductList = () => {
@@ -18,12 +19,22 @@ const ProductList = () => {
     const [selectedAttributes, setSelectedAttributes] = useState<Record<number, number>>({});
     const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
     const [selectedType, setSelectedType] = useState<ProductType | "bulk">();
-
+    // Lấy keyword từ url
+    const [searchParams] = useSearchParams();
+    const keyword = searchParams.get("search") || "";
     // load data
     useEffect(() => {
-        productService.getAll().then(setProducts);
+    //     productService.getAll().then(setProducts);
+    //     categoryService.getAll().then(setCategories);
+    // }, []);
+        if (keyword) {
+            productService.getSearchProducts(keyword).then(setProducts); // ⭐
+        } else {
+            productService.getAll().then(setProducts);
+        }
+
         categoryService.getAll().then(setCategories);
-    }, []);
+    }, [keyword]);
 
     // đổi category → reset attribute
     const handleCategoryChange = (id: number) => {
@@ -100,11 +111,19 @@ const ProductList = () => {
             />
             {/*3. right: ds products*/}
             <div className={styles.content}>
+                {keyword && (
+                    <h2 className={styles.productListTitle}>
+                        Kết quả tìm kiếm: <b>{keyword}</b>
+                    </h2>
+                )}
+                {!keyword && (
+                    <h2 className={styles.productListTitle}>
+                        Danh sách sản phẩm
+                    </h2>
+                )}
                 {filteredProducts.length === 0 ? (
                     <p className={styles.empty}>Không tìm thấy sản phẩm phù hợp</p>
                 ) : (
-                    <>
-                    <h2 className={styles.productListTitle}>Danh sách sản phẩm</h2>
                 <div className={styles.grid}>
                     {filteredProducts.map(product =>
                         product.type === "combo" ? (
@@ -115,7 +134,6 @@ const ProductList = () => {
                             <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
-                    </>
                 )}
             </div>
         </div>

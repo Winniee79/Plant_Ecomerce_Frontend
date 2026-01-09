@@ -58,6 +58,7 @@
   {
     "id": 6,
     "name": "Ổi Ruby Lùn",
+    "slug": "oi-ruby-lun",
     "price": 180000,
     "image": "https://kimbiofarm.com/wp-content/uploads/2025/06/cay-giong-oi-ruby-5.webp",
     "type": "plant",
@@ -79,6 +80,7 @@
   {
     "id": 8,
     "name": "Cây Bồ Đề",
+    "slug": "cay-bo-de",
     "price": 50000,
     "image": "https://phuongtrunggreen.com/resource/gellary/images/Cay-Cong-Trinh/cay-bo-de-6a.jpg",
     "type": "plant",
@@ -89,6 +91,7 @@
   {
     "id": 9,
     "name": "Cây Lim Xanh",
+    "slug": "cay-lim-xanh",
     "price": 100000,
     "image": "https://giongcaytrong.com/wp-content/uploads/2017/06/cay-lim-xanh.jpg",
     "type": "plant",
@@ -99,6 +102,7 @@
   {
     "id": 10,
     "name": "Cây Keo Tai Tượng",
+    "slug": "cay-keo-tai-tuong",
     "price": 25000,
     "image": "https://hoa4mua.vn/wp-content/uploads/2020/11/keo-tai-tuong-2.jpg",
     "type": "plant",
@@ -109,6 +113,7 @@
   {
     "id": 11,
     "name": "Cây Phi Lao",
+    "slug": "cay-phi-lao",
     "price": 22000,
     "image": "https://caybamien.vn/wp-content/uploads/2022/07/y-nghia-cay-phi-lao-768x960.jpg",
     "type": "plant",
@@ -119,6 +124,7 @@
   {
     "id": 12,
     "name": "Cây Tràm Gió",
+    "slug": "cay-tram-gio",
     "price": 120000,
     "image": "https://nguyentuanhung.vn/wp-content/uploads/2020/07/loi-ich-suc-khoe-cua-tinh-dau-tram-gio-o9jniums8cd0jcxb2faqdziju7rsb7ycl0e7o7reec.jpg",
     "type": "plant",
@@ -129,6 +135,7 @@
   {
     "id": 13,
     "name": "Cây bàng Singapore",
+    "slug": "cay-bang-singapore",
     "price": 550000,
     "image": "https://mowgarden.com/wp-content/uploads/2021/11/cay-bang-singapore-lon-chau-xi-mang-da-mai.jpg",
     "type": "plant",
@@ -139,6 +146,7 @@
   {
     "id": 14,
     "name": "Cây Hải đường",
+    "slug": "cay-hai-duong",
     "price": 800000,
     "image": "https://mowgarden.com/wp-content/uploads/2023/01/haiduongmowgarden.jpg",
     "type": "plant",
@@ -233,6 +241,7 @@
   {
     "id": 24,
     "name": "Cỏ Nhung Nhật",
+    "slug": "co-nhung-nhat",
     "price": 60000,
     "image": "https://caygianghuong.net/wp-content/uploads/2021/01/unnamed-2.jpg",
     "type": "plant",
@@ -243,6 +252,7 @@
   {
     "id": 25,
     "name": "Rau cải xanh",
+    "slug": "rau-cai-xanh",
     "price": 15000,
     "image": "https://tse3.mm.bing.net/th/id/OIP.4ejnwelmOHhsEcbArd7zowHaFS?pid=Api&P=0&h=220",
     "type": "seed",
@@ -253,6 +263,7 @@
   {
     "id": 26,
     "name": "Rau muống",
+    "slug": "rau-muong",
     "price": 12000,
     "image": "https://down-vn.img.susercontent.com/file/7e7ff5da322c59e5494af93f17848547",
     "type": "seed",
@@ -263,6 +274,7 @@
   {
     "id": 27,
     "name": "Rau xà lách",
+    "slug": "rau-xa-lach",
     "price": 10000,
     "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/521/346/products/hat-giong-rau-xa-lach-1.png?v=1723089261877",
     "type": "seed",
@@ -395,6 +407,7 @@
   {
     "id": 42,
     "name": "Phân rơm ủ hoai hữu cơ",
+    "slug": "phan-rom-u-hoai-huu-co",
     "price": 250000,
     "image": "https://mowgarden.com/wp-content/uploads/2021/05/phan-rom-hoai-muc-1.jpg",
     "type": "supplies",
@@ -405,6 +418,7 @@
   {
     "id": 43,
     "name": "Xẻng đào đất cán gỗ",
+    "slug": "xeng-dao-dat-can-go",
     "price": 180000,
     "image": "https://qgtechno.com.vn/wp-content/uploads/2018/07/X%E1%BA%BBng-l%C3%A0m-v%C6%B0%E1%BB%9Dn-c%C3%A1n-g%E1%BB%97-Bosi-BS561349-125cm.jpg",
     "type": "supplies",
@@ -415,6 +429,7 @@
   {
     "id": 44,
     "name": "Đất trồng cây hữu cơ cao cấp",
+    "slug": "dat-trong-cay-huu-co-cao-cap",
     "price": 180000,
     "image": "https://tse2.mm.bing.net/th/id/OIP.EMLMqm006Pub-W9zolm6cwHaHa?pid=Api&P=0&h=220",
     "type": "supplies",
@@ -425,6 +440,7 @@
   {
     "id": 45,
     "name": "Thuốc trừ sâu sinh học Neem",
+    "slug": "thuoc-tru-sau-sinh-hoc-neem",
     "price": 66000,
     "image": "https://skyfarm.vn/uploads/Thuy-canh/thuoc-tru-sau-sinh-hoc-neem-nano-chinh-hang-1.jpg",
     "type": "supplies",

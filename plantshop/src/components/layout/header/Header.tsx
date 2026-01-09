@@ -4,11 +4,13 @@ import menuplant1 from "../../../assets/images/plantmenu1.png";
 import logo from "../../../assets/images/Logo.png";
 import {categoryService} from "../../../services/category.service";
 import type {Category} from "../../../types/category.type";
+import Search from "../../../pages/search/Search"
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState<number | null>(null); // id category đang mở
     const [openUser, setOpenUser] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [searchOpen, setSearchOpen] = useState(false);
 
     // ref bao cả menu trigger + mega menu
     const menuRef = useRef<HTMLDivElement>(null);
@@ -52,8 +54,10 @@ const Header = () => {
 
                     {/* 3. ACTION */}
                     <div className={styles.action}>
-                        <i className="fa-solid fa-magnifying-glass" />
+                        <i className="fa-solid fa-magnifying-glass" onClick={() => setSearchOpen(true)} />
+                        <Search open={searchOpen} onClose={() => setSearchOpen(false)} />
                         <i className="fa-solid fa-cart-shopping" />
+                        <i className="fa-solid fa-heart" />
                         <div className={styles.userWrapper}
                             ref={userRef}
                             onClick={() => setOpenUser(prev => !prev)}>
