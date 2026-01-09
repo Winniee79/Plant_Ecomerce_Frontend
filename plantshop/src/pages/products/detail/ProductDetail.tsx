@@ -21,7 +21,9 @@ const Productdetail = () => {
     const [suggestSupplies, setSuggestSupplies] = useState<ProductDetail[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
     //const [loadingReview, setLoadingReview] = useState(false);
-
+    const [newComment, setNewComment] = useState("");
+    const [newRating, setNewRating] = useState(5);
+    const user = { id: 999, name: "Khách hàng", avatar: "https://i.pravatar.cc/60?img=50" }; // demo user
     useEffect(() => {
             if (!slug) return;
                 productService.getProductDetailSlug(slug).then(p => {
@@ -79,6 +81,35 @@ const Productdetail = () => {
         product.category?.name,
         ...(product.attributes?.map(attr => attr.name) ?? [])
     ].filter(Boolean);
+
+    // Trung bình dánh giá
+    const averageRating = reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : 0;
+    const formattedAverage = averageRating.toFixed(1);
+    // thêm bình luaanj
+    const handleAddComment = async () => {
+        if (!newComment.trim()) return alert("Vui lòng nhập nội dung bình luận");
+
+        if (!product?.id || !product.slug) return;
+
+        try {
+            const review = await reviewService.addReview({
+                productId: product.id,
+                slug: product.slug,
+                user,
+                rating: newRating,
+                content: newComment,
+            });
+
+            setReviews(prev => [review, ...prev]); // thêm vào đầu danh sách
+            setNewComment("");
+            setNewRating(5);
+        } catch (error) {
+            console.error(error);
+            alert("Không thể gửi bình luận, thử lại sau");
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -319,17 +350,39 @@ const Productdetail = () => {
                 </div>
             </div>
                 {/* BÌNH LUẬN ĐÁNH GIÁ */}
-                <div className={`${styles.accordionItem} ${
-                        activeAccordion === 3 ? styles.active : ""
-                    }`}>
+                <div className={`${styles.accordionItem} ${activeAccordion === 3 ? styles.active : ""}`}>
                     <button className={styles.accordionHeader}
                         onClick={() => toggleAccordion(3)}>
-                        <span className={styles.accordionTitle}>Bình luận & đánh giá</span>
+                        <span className={styles.accordionTitle}>Bình luận & đánh giá -
+                            {reviews.length > 0 && ` (${formattedAverage}★)`}</span>
                         <span className={styles.accordionIcon}></span>
                     </button>
 
                     <div className={styles.accordionContent}>
                         <div className={styles.accordionInner}>
+                            {/* FORM THÊM BÌNH LUẬN */}
+                                <div className={styles.addComment}>
+                                    <h4>Thêm đánh giá của bạn</h4>
+                                    {/* Rating 5 sao */}
+                                    <div className={styles.starRating}>
+                                        {[1, 2, 3, 4, 5].map(n => (
+                                            <span key={n}
+                                                // className={`${styles.star} ${n <= newRating ? styles.filled : ""}`}
+                                                onClick={() => setNewRating(n)}
+                                                style={{ cursor: "pointer", fontSize: "24px", color: n <= newRating ? "#FFD700" : "#CCC" }}
+                                            >★</span>
+                                        ))}
+                                    </div>
+                                    <textarea
+                                        value={newComment}
+                                        onChange={e => setNewComment(e.target.value)}
+                                        placeholder="Viết bình luận..."
+                                        rows={4}
+                                        className={styles.commentTextarea}
+                                    />
+                                    <button className={styles.btnSendComment} onClick={handleAddComment}>Gửi đánh giá</button>
+                                </div>
+                            {/*DANH SÁCH ĐÁNH GIÁ*/}
                             <div className={styles.commentList}>
                                 {/*{loadingReview && <p>Đang tải các đánh giá về sản phẩm...</p>}*/}
                                 {/*{!loadingReview && reviews.length === 0 && (*/}

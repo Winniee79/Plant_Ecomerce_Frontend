@@ -459,6 +459,65 @@ body {
 .commentBody p {
    color: green;
 }
+/*THÊM BÌNH LUẬN*/
+.addComment {
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    background: #f4fbf6;
+    max-width: 1200px;
+    margin: 10px 0;
+}
+
+.addComment h4 {
+    margin-bottom: 10px;
+    color: #2f4f3e;
+    font-weight: 600;
+    font-size: 20px;
+}
+.starRating {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.star {
+    font-size: 30px;
+    color: #ccc; /* sao chưa chọn */
+}
+.star.filled {
+    color: #FFD700; /* sao vàng khi chọn */
+}
+
+
+.addComment textarea {
+    width: 100%;
+    max-width: 1100px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+.addComment button {
+    padding: 10px 20px;
+    background: #0a8a43;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.addComment button:hover {
+    background: #07602d;
+}
+
+.ratingSelect {
+    margin-bottom: 10px;
+}
 
 /* SẢN PHẨM TƯƠNG TỰ*/
 .relatedproduct {

@@ -1,12 +1,13 @@
 export interface ReviewUser {
     id: number;
     name: string;
-    avatar?: string;
+    avatar: string;
 }
 
 export interface Review {
     id: number;
     productId: number;
+    slug: string;
     user: ReviewUser;
     rating: number; // 1 → 5 sao
     content: string;
