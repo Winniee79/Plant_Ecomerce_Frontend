@@ -20,6 +20,7 @@ Dự án Frontend mô phỏng **website bán cây cảnh** được xây dựng 
 - npm install react @types/react @types/react-dom --save-dev
 - npm install @radix-ui/react-slider
 - npm i react-markdown
+- npm install @fortawesome/fontawesome-free
 
 ---------------------------------------------------------------------------------------------
 

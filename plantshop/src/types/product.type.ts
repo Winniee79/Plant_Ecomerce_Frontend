@@ -15,6 +15,7 @@ export type ProductType =
     | 'combo'
 
 export interface Product extends ProductBase {
+    stock: number;
     images?: string[];
     categoryId: number;
     attributeIds: number[];

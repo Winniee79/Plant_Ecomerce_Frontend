@@ -1,10 +1,16 @@
-import { Routes, Route } from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import MainLayout from "../components/layout/main/MainLayout";
- import Home from "../pages/home/Home";
-import ProductList from "../pages/products/list/ProductList";
-import ProductDetail from "../pages/products/detail/ProductDetail";
-
-
+import Home from "../pages/home/Home";
+import Login from "../pages/auth/login/Login";
+import Register from "../pages/auth/register/Register";
+import Profile from "../pages/profile/Profile.tsx";
+import Cart from "../pages/cart/Cart";
+import Wishlist from "../pages/wishlist/Wishlist";
+import Checkout from "../pages/checkout/Checkout";
+import PrivacyPolicy from "../pages/privacy/PrivacyPolicy";
+import OrderSuccess from "../pages/order/OrderSuccess";
+import ProductList from "../pages/products/list/ProductList.tsx";
+import ProductDetail from "../pages/products/detail/ProductDetail.tsx";
 const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout />}>
@@ -12,6 +18,14 @@ const AppRoutes = () => (
             <Route path="/home" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/products/:slug" element={<ProductDetail />} />
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/carts" element={<Cart/>}/>
+            <Route path="/wishlist" element={<Wishlist/>}/>
+            <Route path="/checkout" element={<Checkout/>}/>
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/order_success" element={< OrderSuccess />} />
         </Route>
     </Routes>
 );
