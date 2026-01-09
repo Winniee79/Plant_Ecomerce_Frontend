@@ -3,6 +3,7 @@ import styles from './Orders.module.css';
 import { initLocalStorageData } from '../../utils/seedData';
 import type {Order, OrderItem, OrderStatus} from '../../types/order.type';
 import type {Product} from '../../types/product.type';
+import { useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -31,6 +32,7 @@ const OrdersPage: React.FC = () => {
     const [orders, setOrders] = useState<OrderDisplay[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const navigate = useNavigate();
 
     // --- STATE MỚI CHO POPUP HỦY ĐƠN ---
     const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
@@ -172,7 +174,12 @@ const OrdersPage: React.FC = () => {
                                                 Hủy đơn
                                             </button>
                                         )}
-                                        <button className={styles.btnDetail}>Xem Chi Tiết</button>
+                                        <button
+                                            className={styles.btnDetail}
+                                            onClick={() => navigate(`/order/${order.id}`)} // Chuyển hướng
+                                        >
+                                            Xem Chi Tiết
+                                        </button>
                                     </div>
                                 </div>
 

@@ -102,7 +102,7 @@
     color: #888;
 }
 
-/* --- BUTTONS --- */
+/* BUTTONS */
 .btnGroup {
     display: flex;
     gap: 10px;
@@ -110,7 +110,7 @@
 
 .btnCancel {
     background-color: #fff;
-    color: #d32f2f; /* Màu đỏ */
+    color: #d32f2f;
     border: 1px solid #d32f2f;
     padding: 8px 16px;
     border-radius: 4px;
@@ -125,14 +125,14 @@
     color: #fff;
 }
 
-/* --- MODAL (POPUP) --- */
+/* MODAL (POPUP) */
 .modalOverlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Nền tối mờ */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -303,7 +303,7 @@
     justify-content: center;
     border: 1px solid #ddd;
     background-color: #fff;
-    color: #555; /* Màu icon sẽ ăn theo màu này */
+    color: #555;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
@@ -328,11 +328,10 @@
     background-color: #f9f9f9;
 }
 
-/* Class riêng cho Icon để chắc chắn hiển thị */
 .iconSvg {
     width: 18px;
     height: 18px;
     stroke: currentColor;
     stroke-width: 2;
-    display: block; /* Quan trọng để không bị ẩn */
+    display: block;
 }

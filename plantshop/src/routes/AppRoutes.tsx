@@ -9,6 +9,8 @@ import Wishlist from "../pages/wishlist/Wishlist";
 import Checkout from "../pages/checkout/Checkout";
 import PrivacyPolicy from "../pages/privacy/PrivacyPolicy";
 import Orders from "../pages/order/Orders";
+import OrderDetails from "../pages/order/OrderDetails";
+
 const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout />}>
@@ -21,6 +23,7 @@ const AppRoutes = () => (
             <Route path="/checkout" element={<Checkout/>}/>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/order/:id" element={<OrderDetails />} />
         </Route>
     </Routes>
 );
