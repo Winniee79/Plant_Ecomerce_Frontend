@@ -30,7 +30,7 @@
 }
 
 .name {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     margin-top: 10px;
     color: #01370C;
@@ -44,6 +44,15 @@
     word-break: break-word;
     position: relative;
     padding: 10px 0 20px 0;
+}
+.productLink {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.productLink:visited {
+    color: inherit;
 }
 
 /* Gạch trang trí ngay dưới tên */

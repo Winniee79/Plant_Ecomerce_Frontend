@@ -3,7 +3,7 @@ import { http, HttpResponse } from "msw";
 
 export const cartHandlers = [
     // Lấy danh sách cart đang active (user hoặc guest)
-    http.get("/plant/carts", ({ request }) => {
+    http.get("/api/carts", ({ request }) => {
         // Lấy query params từ URL
         const url = new URL(request.url);
         const userId = url.searchParams.get("user_id"); // id user đã login
@@ -24,7 +24,7 @@ export const cartHandlers = [
     }),
 
     // Tạo cart mới (user hoặc guest)
-    http.post("/plant/carts", async ({ request }) => {
+    http.post("/api/carts", async ({ request }) => {
         // Lấy body từ request
         const body = await request.json() as {
             user_id: number | null;

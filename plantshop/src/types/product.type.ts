@@ -2,7 +2,7 @@ export interface ProductBase {
     id: number;
     name: string;
     slug: string;
-    image?: string;
+    image: string;
     price: number;
     salePrice?: number | null;
     type: ProductType;

@@ -19,9 +19,9 @@ const Wishlist = () => {
     useEffect(() => {
         Promise.all([
             // Lấy wishlist
-            fetch("/plant/wishlist").then(res => res.json()),
+            fetch("/api/wishlist").then(res => res.json()),
             // Lấy danh sách sản phẩm
-            fetch("/plant/products").then(res => res.json())
+            fetch("/api/products").then(res => res.json())
         ])
             .then(([wishlistData, productData]) => {
                 setItems(wishlistData.wishlist);
@@ -32,7 +32,7 @@ const Wishlist = () => {
 
     // Xóa sản phẩm khỏi wishlist
     const handleRemove = async (productId: number) => {
-        await fetch(`/plant/wishlist/${productId}`, { method: "DELETE" });
+        await fetch(`/api/wishlist/${productId}`, { method: "DELETE" });
         setItems(prev => prev.filter(i => i.product_id !== productId));
     };
 

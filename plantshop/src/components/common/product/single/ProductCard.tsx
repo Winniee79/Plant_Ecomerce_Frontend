@@ -49,7 +49,7 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
             <button className={styles.cartBtn}>
                 <i className="fa-solid fa-cart-plus"></i>
             </button>
-            <Link to={`/products/${product.slug}`}>
+            <Link to={`/products/${product.slug}`} className={styles.productLink}>
             <img src={product.image}
                 alt={product.name}
                 className={styles.image}/>
