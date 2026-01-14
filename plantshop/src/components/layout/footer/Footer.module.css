@@ -23,6 +23,7 @@
     font-size: 14px;
     line-height: 1.6;
     max-width: 320px;
+    color: aliceblue;
 }
 .imgintro img{
     width: 300px;
@@ -79,6 +80,7 @@ ul li a:hover {
 .col3 p {
     font-size: 14px;
     margin-bottom: 12px;
+    color: #ffffff;
 }
 
 /* COL 4 */

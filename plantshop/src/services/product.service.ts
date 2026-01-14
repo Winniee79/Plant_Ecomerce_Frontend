@@ -28,9 +28,9 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
     getSuppliesProducts(): Promise<Product[]> {
         return api.get("/supplies_products").then(res => res.data);
     },
-    getProductDetail(id: number): Promise<ProductDetail> {
-        return api.get(`/products/${id}`).then(res => res.data);
-    },
+    // getProductDetail(id: number): Promise<ProductDetail> {
+    //     return api.get(`/products/${id}`).then(res => res.data);
+    // },
     getProductDetailSlug(slug: string) : Promise<ProductDetail> {
         return api.get(`/products/${slug}`).then(res => res.data);
     },
@@ -46,6 +46,11 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
 //     Tìm kiếm
     getSearchProducts(query: string) {
         return api.get("/products", {params: { search: query }}).then(res => res.data);
-    }
+    },
+
+    getByCategorySlug(slug: string): Promise<Product[]> {
+        return api.get(`/products/category/${slug}`).then(res => res.data);
+    },
+
 
 };

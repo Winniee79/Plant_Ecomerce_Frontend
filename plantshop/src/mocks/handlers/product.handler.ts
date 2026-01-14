@@ -93,8 +93,17 @@ export const productHandlers = [
             slug.includes(keyword)
         );
     });
-
 return HttpResponse.json(filteredProducts);
+    }),
+// catelogy
+    http.get("/api/products/category/:slug", ({ params }) => {
+        const slug = params.slug as string;
+
+        const filteredProducts = datapro.products.filter(
+            p => p.category?.slug === slug
+        );
+
+        return HttpResponse.json(filteredProducts);
     }),
 
 
