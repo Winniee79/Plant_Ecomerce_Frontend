@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Orders.module.css';
-import { initLocalStorageData } from '../../utils/seedData';
-import type {Order, OrderItem, OrderStatus} from '../../types/order.type';
-import type {Product} from '../../types/product.type';
 import { useNavigate } from 'react-router-dom';
+import type { Order, OrderStatus } from '../../types/order.type';
 
 const ITEMS_PER_PAGE = 3;
 
+// TabStatus
 type TabStatus = 'processing' | 'shipping' | 'completed' | 'cancelled';
-
-interface OrderDisplay extends Order {
-    itemsDetail: Array<OrderItem & { productInfo?: Product }>;
-}
 
 const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
-const mapBackendStatusToTab = (status: string): TabStatus => {
+const mapBackendStatusToTab = (status: OrderStatus | string): TabStatus => {
     switch (status) {
-        case 'pending': case 'confirmed': case 'packing': case 'unpaid': return 'processing';
-        case 'shipping': return 'shipping';
-        case 'done': case 'paid': case 'success': return 'completed';
+        case 'pending': case 'confirmed': case 'packing': case 'unpaid': case 'processing': return 'processing';
+        case 'shipping': case 'shipped': return 'shipping';
+        case 'done': case 'paid': case 'success': case 'delivered': return 'completed';
         case 'cancelled': case 'failed': case 'refunded': return 'cancelled';
         default: return 'processing';
     }
@@ -29,43 +24,63 @@ const mapBackendStatusToTab = (status: string): TabStatus => {
 
 const OrdersPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<TabStatus>('processing');
-    const [orders, setOrders] = useState<OrderDisplay[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const navigate = useNavigate();
 
-    // --- STATE MỚI CHO POPUP HỦY ĐƠN ---
+    // State cho popup hủy
     const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
-    const [orderToCancel, setOrderToCancel] = useState<string | null>(null); // Lưu ID gốc để xử lý
+    const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
 
     const handleTabChange = (tab: TabStatus) => {
         setActiveTab(tab);
         setCurrentPage(1);
     };
 
-    // Hàm load dữ liệu (dùng chung để gọi lại khi cần reload)
+    // LOAD DATA TỪ LOCALSTORAGE
     const fetchOrders = () => {
-        const rawOrders: Order[] = JSON.parse(localStorage.getItem('orders') || '[]');
-        const rawItems: OrderItem[] = JSON.parse(localStorage.getItem('order_items') || '[]');
-        const rawProducts: Product[] = JSON.parse(localStorage.getItem('products') || '[]');
+        try {
+            const storedUser = localStorage.getItem("user");
+            const currentUser = storedUser ? JSON.parse(storedUser).user : null;
 
-        if (rawOrders.length > 0) {
-            const processedOrders: OrderDisplay[] = rawOrders.map((order) => {
-                const currentItems = rawItems.filter((item) => String(item.order_id) === String(order.id));
-                const itemsWithProduct = currentItems.map((item) => {
-                    const product = rawProducts.find((p) => p.id === item.product_id);
-                    return { ...item, productInfo: product };
+            const storedOrders = localStorage.getItem('orders');
+
+            if (storedOrders) {
+                const parsedOrders = JSON.parse(storedOrders) as Order[];
+
+                // Lọc theo user
+                const myOrders = currentUser
+                    ? parsedOrders.filter(o => String(o.user_id) === String(currentUser.id))
+                    : [];
+
+                // Map dữ liệu
+                const processedOrders: Order[] = myOrders.map((order) => {
+                    const originalItems = order.items || [];
+
+                    // Map item để có field productInfo
+                    const itemsMapped = originalItems.map((item) => ({
+                        ...item,
+                        productInfo: {
+                            name: item.name || "Sản phẩm",
+                            imageUrl: item.imageUrl || 'https://via.placeholder.com/80'
+                        }
+                    }));
+
+                    return { ...order, itemsDetail: itemsMapped };
                 });
-                return { ...order, itemsDetail: itemsWithProduct };
-            });
 
-            processedOrders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-            setOrders(processedOrders);
+                // Sắp xếp mới nhất
+                processedOrders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+                setOrders(processedOrders);
+            }
+        } catch (error) {
+            console.error("Lỗi đọc dữ liệu:", error);
+            setOrders([]);
         }
     };
 
     useEffect(() => {
-        initLocalStorageData();
         const timer = setTimeout(() => {
             fetchOrders();
             setIsLoading(false);
@@ -73,39 +88,31 @@ const OrdersPage: React.FC = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // --- LOGIC HỦY ĐƠN ---
-
-    // 1. Mở popup
-    const onOpenCancelModal = (orderRawId: string) => {
-        setOrderToCancel(orderRawId);
+    // Logic Hủy đơn
+    const onOpenCancelModal = (orderId: string) => {
+        setOrderToCancel(orderId);
         setShowCancelModal(true);
     };
 
-    // 2. Xác nhận hủy
     const handleConfirmCancel = () => {
         if (!orderToCancel) return;
-
-        const rawOrders: Order[] = JSON.parse(localStorage.getItem('orders') || '[]');
-
-        const updatedRawOrders = rawOrders.map(order => {
-            if (String(order.id) === String(orderToCancel)) {
-                // SỬA Ở ĐÂY: Thay 'as any' bằng 'as OrderStatus'
-                return { ...order, status: 'cancelled' as OrderStatus };
-            }
-            return order;
-        });
-
-        localStorage.setItem('orders', JSON.stringify(updatedRawOrders));
-
-        fetchOrders();
+        const storedOrders = localStorage.getItem('orders');
+        if (storedOrders) {
+            const allOrders = JSON.parse(storedOrders) as Order[];
+            const updatedOrders = allOrders.map((o) => {
+                if (String(o.id) === String(orderToCancel)) {
+                    return { ...o, status: 'cancelled' as OrderStatus };
+                }
+                return o;
+            });
+            localStorage.setItem('orders', JSON.stringify(updatedOrders));
+            fetchOrders();
+        }
         setShowCancelModal(false);
         setOrderToCancel(null);
     };
 
-    // --- END LOGIC ---
-
     const filteredOrders = orders.filter((order) => mapBackendStatusToTab(order.status) === activeTab);
-
     const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentOrders = filteredOrders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -128,7 +135,6 @@ const OrdersPage: React.FC = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.pageTitle}>Đơn Hàng Của Tôi</h1>
-
             <div className={styles.tabsContainer}>
                 {(['processing', 'shipping', 'completed', 'cancelled'] as TabStatus[]).map((tab) => (
                     <div
@@ -147,36 +153,33 @@ const OrdersPage: React.FC = () => {
             <div className={styles.ordersList}>
                 {currentOrders.length > 0 ? (
                     currentOrders.map((order) => {
-                        const visibleItems = order.itemsDetail.slice(0, 3);
-                        const remainingItemsCount = order.itemsDetail.length - 3;
-
-                        // Lấy trạng thái tab để check điều kiện hiển thị nút
+                        // Dùng itemsDetail đã map ở trên
+                        const currentItems = order.itemsDetail || [];
+                        const visibleItems = currentItems.slice(0, 3);
+                        const remainingItemsCount = currentItems.length - 3;
                         const currentTab = mapBackendStatusToTab(order.status);
 
                         return (
                             <div key={order.id} className={styles.orderCard}>
                                 <div className={styles.cardHeader}>
                                     <div className={styles.orderIdDate}>
-                                        <span className={styles.orderCode}>Đơn hàng #{order.id}</span>
+                                        <span className={styles.orderCode}>Đơn hàng #{order.id.substring(0,8).toUpperCase()}</span>
                                         <span className={styles.orderDate}>
-                      {new Date(order.created_at).toLocaleDateString('vi-VN')}
-                    </span>
+                                            {new Date(order.created_at).toLocaleDateString('vi-VN')}
+                                        </span>
                                     </div>
-
-                                    {/* BUTTON GROUP */}
                                     <div className={styles.btnGroup}>
-                                        {/* Chỉ hiện nút Hủy ở tab Đang Xử Lý */}
                                         {currentTab === 'processing' && (
                                             <button
                                                 className={styles.btnCancel}
-                                                onClick={() => onOpenCancelModal(order.id)} // Truyền ID thực tế (Order.id)
+                                                onClick={() => onOpenCancelModal(order.id)}
                                             >
                                                 Hủy đơn
                                             </button>
                                         )}
                                         <button
                                             className={styles.btnDetail}
-                                            onClick={() => navigate(`/order/${order.id}`)} // Chuyển hướng
+                                            onClick={() => navigate(`/profile/orders/${order.id}`)}
                                         >
                                             Xem Chi Tiết
                                         </button>
@@ -193,7 +196,7 @@ const OrdersPage: React.FC = () => {
                                             />
                                             <div className={styles.productInfo}>
                                                 <div className={styles.prodName}>
-                                                    {item.productInfo?.name || `Sản phẩm #${item.product_id}`}
+                                                    {item.productInfo?.name}
                                                 </div>
                                                 <div className={styles.prodQty}>x{item.quantity}</div>
                                             </div>
@@ -212,7 +215,6 @@ const OrdersPage: React.FC = () => {
                                     ) : (
                                         <div></div>
                                     )}
-
                                     <div className={styles.totalPriceWrapper}>
                                         Tổng cộng: <span className={styles.totalPriceValue}>{formatCurrency(order.total_amount)}</span>
                                     </div>
@@ -238,7 +240,6 @@ const OrdersPage: React.FC = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                         </svg>
                     </button>
-
                     {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                         <button
                             key={page}
@@ -248,7 +249,6 @@ const OrdersPage: React.FC = () => {
                             {page}
                         </button>
                     ))}
-
                     <button
                         className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}
                         onClick={() => handlePageChange(currentPage + 1)}
@@ -261,14 +261,13 @@ const OrdersPage: React.FC = () => {
                 </div>
             )}
 
-            {/* --- POPUP MODAL --- */}
             {showCancelModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowCancelModal(false)}>
-                    {/* stopPropagation để click vào nội dung modal không bị đóng */}
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <h3 className={styles.modalTitle}>Xác nhận hủy đơn</h3>
                         <p className={styles.modalDesc}>
-                            Bạn có chắc chắn muốn hủy đơn hàng này không? <br/>
+                            Bạn có chắc chắn muốn hủy đơn hàng này không?
+                            <br />
                             Hành động này không thể hoàn tác.
                         </p>
                         <div className={styles.modalActions}>
@@ -282,7 +281,6 @@ const OrdersPage: React.FC = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

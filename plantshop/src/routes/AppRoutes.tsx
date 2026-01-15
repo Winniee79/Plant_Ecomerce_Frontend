@@ -10,8 +10,8 @@ import Checkout from "../pages/checkout/Checkout";
 import PrivacyPolicy from "../pages/privacy/PrivacyPolicy";
 import Orders from "../pages/order/Orders";
 import OrderDetails from "../pages/order/OrderDetails";
-
 import OrderSuccess from "../pages/order/OrderSuccess";
+
 const AppRoutes = () => (
     <Routes>
         <Route element={<MainLayout />}>
