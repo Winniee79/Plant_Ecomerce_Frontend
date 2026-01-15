@@ -12,6 +12,7 @@ import ComboImg from "../../assets/images/CayPhuQuy.jpg";
 import HatGiongImg from "../../assets/images/HatGiong.jpg";
 import GiaSiImg from "../../assets/images/CayGiongGiaSi.png";
 import vuonImg from "../../assets/images/vuon.jpg";
+import { Link } from "react-router-dom";
 
 //Function component Home (khai báo, tạo)
 const Home = () => {
@@ -75,30 +76,36 @@ const Home = () => {
             {/*    2.1 CHOICE*/}
                 <section className={styles.choiceSection}>
                     <div className={styles.choiceList}>
-                        <div className={styles.choiceItem}>
+
+                        <Link to="/products?type=plant" className={styles.choiceItem}>
                             <img src={CayTrongImg} alt="CayTrong" />
                             <span>Cây trồng</span>
-                        </div>
+                        </Link>
 
-                        <div className={styles.choiceItem}>
+                        <Link to="/products?type=pot" className={styles.choiceItem}>
                             <img src={ChauCayImg} alt="ChauCay" />
                             <span>Chậu cây</span>
-                        </div>
+                        </Link>
 
-                        <div className={styles.choiceItem}>
+                        <Link to="/products?type=combo" className={styles.choiceItem}>
                             <img src={ComboImg} alt="Combo" />
                             <span>Combo</span>
-                        </div>
+                        </Link>
 
-                        <div className={styles.choiceItem}>
+                        <Link to="/products?type=seed" className={styles.choiceItem}>
                             <img src={HatGiongImg} alt="HatGiong" />
                             <span>Hạt gống</span>
-                        </div>
+                        </Link>
 
-                        <div className={styles.choiceItem}>
+                        <Link to="/products?type=bulk" className={styles.choiceItem}>
                             <img src={GiaSiImg} alt="UuDaiSi" />
                             <span>Ưu đãi sĩ</span>
-                        </div>
+                        </Link>
+                    </div>
+                    <div className={styles.viewMoreWrapper}>
+                        <Link to="/products" className={styles.viewMoreBtn}>
+                            Xem thêm sản phẩm →
+                        </Link>
                     </div>
                 </section>
                     {/*2.2 SẢN PHẨM MỚI*/}

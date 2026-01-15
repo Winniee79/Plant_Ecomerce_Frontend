@@ -16,29 +16,40 @@ const ProductList = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
 
-    // filter state (client-side)
+    // Attribute filter (1 group chỉ chọn 1 attribute)
     const [selectedAttributes, setSelectedAttributes] = useState<Record<number, number>>({});
+    // Filter theo mức price
     const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
-    const [selectedType, setSelectedType] = useState<ProductType | "bulk">();
+    // const [selectedType, setSelectedType] = useState<ProductType | "bulk">();
+
 
     // URL params
     const { slug: categorySlug } = useParams<{ slug?: string }>();
     const [searchParams] = useSearchParams();
+
+    // search keyword (?search=abc)
     const keyword = searchParams.get("search") || "";
-    //const categorySlug = searchParams.get("category");
+
+    // attribute id từ URL (?attrId=3)
+    const attrIdParam = searchParams.get("attrId");
+    const attrId = attrIdParam ? Number(attrIdParam) : null;
+
+    // type từ Home  (?type=single | combo | bulk)
+    const type = searchParams.get("type");
+
+    // selectedType là derived state
+    const selectedType = type as ProductType | "bulk" | undefined;
 
     // load data theo URL
     useEffect(() => {
-        if (categorySlug) {
-            productService
-                .getByCategorySlug(categorySlug)
-                .then(setProducts);
-        } else if (keyword) {
+        if (categorySlug) {  //catelogy
+            productService.getByCategorySlug(categorySlug).then(setProducts);
+        } else if (keyword) { //search
             productService
                 .getSearchProducts(keyword)
                 .then(setProducts);
         } else {
-            productService.getAll().then(setProducts);
+            productService.getAll().then(setProducts); // all
         }
 
         categoryService.getAll().then(setCategories);
@@ -60,6 +71,14 @@ const ProductList = () => {
     // filter products
     const filteredProducts = useMemo(() => {
         return products.filter(product => {
+            //attributeId từ url
+            if (attrId) {
+                const attrIds =
+                    product.attributes?.map((a) => a.id) ?? [];
+                if (!attrIds.includes(attrId)) {
+                    return false;
+                }
+            }
             // price
             const price = product.salePrice ?? product.price;
             if (price < priceRange[0] || price > priceRange[1]) {
@@ -78,7 +97,8 @@ const ProductList = () => {
             // attribute
             const selectedAttrIds = Object.values(selectedAttributes);
             if (selectedAttrIds.length > 0) {
-                const productAttrIds = product.attributeIds ?? [];
+                const productAttrIds =
+                    product.attributes?.map((a) => a.id) ?? [];
                 if (!selectedAttrIds.every(id => productAttrIds.includes(id))) {
                     return false;
                 }
@@ -86,7 +106,7 @@ const ProductList = () => {
 
             return true;
         });
-    }, [products, selectedAttributes, priceRange, selectedType]);
+    }, [products, attrId, selectedAttributes, priceRange, selectedType]);
 
     return (
         <div className={styles.container}>
@@ -104,7 +124,8 @@ const ProductList = () => {
                     priceRange={priceRange}
                     onPriceChange={setPriceRange}
                     selectedType={selectedType}
-                    onTypeChange={setSelectedType}
+                    // onTypeChange={setSelectedType}
+                    onTypeChange={() => {}}  // type lấy từ url
                 />
 
                 {/* PRODUCT LIST */}

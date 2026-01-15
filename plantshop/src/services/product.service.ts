@@ -48,9 +48,11 @@ export const productService = { // tự đăt để gom các hàm liên quan đ�
         return api.get("/products", {params: { search: query }}).then(res => res.data);
     },
 
-    getByCategorySlug(slug: string): Promise<Product[]> {
-        return api.get(`/products/category/${slug}`).then(res => res.data);
+    getByCategorySlug(slug: string, attrId?: number): Promise<Product[]> {
+        return api.get(`/products/category/${slug}`, {
+                params: attrId ? { attrId } : {},
+            })
+            .then(res => res.data);
     },
-
 
 };

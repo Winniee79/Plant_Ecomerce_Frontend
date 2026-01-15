@@ -130,7 +130,7 @@ const Header = () => {
                                                 <h4>Theo {group.group.name}</h4>
                                                 {group.attributes.map(attr => (
                                                     <Link key={attr.id}
-                                                        to={`/products/category/${cat.slug}?attr=${attr.slug}`}
+                                                        to={`/products/category/${cat.slug}?attrId=${attr.id}`}
                                                         className={styles.attrLink}
                                                         onClick={() => setOpenMenu(null)}>
                                                         <i className="fa-solid fa-seedling" />

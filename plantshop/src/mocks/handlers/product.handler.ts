@@ -96,16 +96,38 @@ export const productHandlers = [
 return HttpResponse.json(filteredProducts);
     }),
 // catelogy
-    http.get("/api/products/category/:slug", ({ params }) => {
-        const slug = params.slug as string;
+//     http.get("/api/products/category/:slug", ({ params }) => {
+//         const slug = params.slug as string;
+//
+//         const filteredProducts = datapro.products.filter(
+//             p => p.category?.slug === slug
+//         );
+//
+//         return HttpResponse.json(filteredProducts);
+//     }),
 
-        const filteredProducts = datapro.products.filter(
+    http.get("/api/products/category/:slug", ({ params, request }) => {
+        const slug = params.slug as string;
+        const url = new URL(request.url);
+
+        // lấy attrId từ query
+        const attrIdParam = url.searchParams.get("attrId");
+        const attrId = attrIdParam ? Number(attrIdParam) : null;
+
+        let filteredProducts = datapro.products.filter(
             p => p.category?.slug === slug
         );
 
-        return HttpResponse.json(filteredProducts);
-    }),
+        // nếu có attrId → lọc thêm
+        if (attrId) {
+            filteredProducts = filteredProducts.filter(p =>
+                Array.isArray(p.attributes) &&
+                p.attributes.some(attr => attr.id === attrId)
+            );
+        }
 
+        return HttpResponse.json(filteredProducts);
+    })
 
 
 ];

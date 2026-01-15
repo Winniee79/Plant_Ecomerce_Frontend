@@ -18,7 +18,8 @@ export interface Product extends ProductBase {
     stock: number;
     images?: string[];
     categoryId: number;
-    attributeIds: number[];
+    // attributeIds: number[];
+    attributes?: Attribute[];
     hasBulkPrice?: boolean;
 
     comboItems?: {
@@ -44,7 +45,7 @@ export interface Attribute {
     id: number;
     name: string;
     slug: string;
-    group: string;
+    group?: string;
 }
 
 export interface WholesalePrice {

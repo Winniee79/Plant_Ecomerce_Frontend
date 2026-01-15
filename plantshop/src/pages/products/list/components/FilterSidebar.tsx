@@ -19,14 +19,14 @@ interface Props {
 
 const MAX_PRICE = 1_000_000;
 
-const PRODUCT_TYPES: { value: ProductType | "bulk"; label: string }[] = [
-    { value: "plant", label: "Cây trồng" },
-    { value: "pot", label: "Chậu" },
-    { value: "seed", label: "Hạt giống" },
-    { value: "supplies", label: "Vật tư" },
-    { value: "combo", label: "Combo" },
-    { value: "bulk", label: "Giá sỉ" }
-];
+// const PRODUCT_TYPES: { value: ProductType | "bulk"; label: string }[] = [
+//     { value: "plant", label: "Cây trồng" },
+//     { value: "pot", label: "Chậu" },
+//     { value: "seed", label: "Hạt giống" },
+//     { value: "supplies", label: "Vật tư" },
+//     { value: "combo", label: "Combo" },
+//     { value: "bulk", label: "Giá sỉ" }
+// ];
 
 const FilterSidebar = ({
                            categories,
@@ -34,8 +34,8 @@ const FilterSidebar = ({
                            onAttributeChange,
                            priceRange,
                            onPriceChange,
-                           selectedType,
-                           onTypeChange
+                           // selectedType,
+                           // onTypeChange
                        }: Props) => {
     const [openCategoryIds, setOpenCategoryIds] = useState<number[]>([]);
     const navigate = useNavigate();
@@ -134,34 +134,34 @@ const FilterSidebar = ({
             </div>
 
             {/* TYPE */}
-            <div className={styles.filterbox}>
-                <h3 className={styles.title}>LOẠI SẢN PHẨM</h3>
-                <div className={styles.typeList}>
-                {PRODUCT_TYPES.map(item => {
-                    const checked = selectedType === item.value;
+            {/*<div className={styles.filterbox}>*/}
+            {/*    <h3 className={styles.title}>LOẠI SẢN PHẨM</h3>*/}
+            {/*    <div className={styles.typeList}>*/}
+            {/*    {PRODUCT_TYPES.map(item => {*/}
+            {/*        const checked = selectedType === item.value;*/}
 
-                    return (
-                        <label
-                            key={item.value}
-                            className={`${styles.typeItem} ${
-                                checked ? styles.checked : ""
-                            }`}>
-                            <input
-                                type="radio"
-                                checked={checked}
-                                onClick={() =>
-                                    onTypeChange(
-                                        checked ? undefined : item.value
-                                    )
-                                }
-                                readOnly
-                            />
-                            <span>{item.label}</span>
-                        </label>
-                    );
-                })}
-                </div>
-            </div>
+            {/*        return (*/}
+            {/*            <label*/}
+            {/*                key={item.value}*/}
+            {/*                className={`${styles.typeItem} ${*/}
+            {/*                    checked ? styles.checked : ""*/}
+            {/*                }`}>*/}
+            {/*                <input*/}
+            {/*                    type="radio"*/}
+            {/*                    checked={checked}*/}
+            {/*                    onClick={() =>*/}
+            {/*                        onTypeChange(*/}
+            {/*                            checked ? undefined : item.value*/}
+            {/*                        )*/}
+            {/*                    }*/}
+            {/*                    readOnly*/}
+            {/*                />*/}
+            {/*                <span>{item.label}</span>*/}
+            {/*            </label>*/}
+            {/*        );*/}
+            {/*    })}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </aside>
     );
 };
