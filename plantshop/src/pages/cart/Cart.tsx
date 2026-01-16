@@ -106,7 +106,33 @@ const Cart = () => {
 
                                     {/* Giá sản phẩm */}
                                     <div className={styles.price}>
-                                        {item.price.toLocaleString()}₫
+                                        {item.isWholesale ? (
+                                            <>
+                                                {/* Giá gốc bị gạch (chỉ hiện khi đang áp dụng giá sỉ) */}
+                                                <span className={styles.oldPrice}>
+                                            {item.original_price?.toLocaleString()}₫
+                                          </span>
+                                                {/* Giá sau khi áp dụng giá sỉ */}
+                                                <span className={styles.newPrice}>
+                                            {item.price.toLocaleString()}₫
+                                          </span>
+                                                {/* Nhãn "Giá sỉ" */}
+                                                <span className={styles.wholesaleBadge}>Giá sỉ</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {/* Giá hiện tại (giá thường hoặc giá sale) */}
+                                                <span className={styles.newPrice}>
+                                            {item.price.toLocaleString()}₫
+                                          </span>
+                                                {/* Nếu chưa đủ số lượng để được giá sỉ hiện tooltip gợi ý */}
+                                                {item.wholesaleMin && (
+                                                    <span
+                                                        className={styles.tooltip}
+                                                        title={`Mua ≥ ${item.wholesaleMin} để được giá sỉ`}>ⓘ</span>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
 
                                     {/* Điều chỉnh số lượng */}
@@ -148,16 +174,26 @@ const Cart = () => {
                         <div className={styles.checkoutWrapper}>
                             <Button
                                 onClick={() => {
+                                    const stored = localStorage.getItem("user");
+                                    const isLoggedIn = !!stored;
+
+                                    if (!isLoggedIn) {
+                                        navigate("/login");
+                                        return;
+                                    }
+
                                     if (selectedIds.length === 0) {
                                         setShowError(true);
                                         return;
                                     }
+
                                     setShowError(false);
                                     navigate("/checkout", {state: {selectedIds}});
                                 }}
                             >
                                 Thanh toán
                             </Button>
+
 
                             {/* Thông báo lỗi */}
                             {showError && (

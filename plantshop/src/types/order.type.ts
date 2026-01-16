@@ -47,6 +47,7 @@ export type Order = {
     note?: string;
     payment_method?: string;
 };
+
 export type OrderCreatePayload = {
     user_id: number | null;
     recipient_name: string;
