@@ -1,14 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams, useLocation } from "react-router-dom";
-import { productService } from "../../../services/product.service";
-import { categoryService } from "../../../services/category.service";
-import type { Product, ProductType } from "../../../types/product.type";
-import type { Category } from "../../../types/category.type";
+import {useEffect, useMemo, useState} from "react";
+import {useParams, useSearchParams, useLocation} from "react-router-dom";
+import {productService} from "../../../services/product.service";
+import {categoryService} from "../../../services/category.service";
+import type {Product, ProductType} from "../../../types/product.type";
+import type {Category} from "../../../types/category.type";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductCard from "../../../components/common/product/single/ProductCard";
 import ProductCardCombo from "../../../components/common/product/combo/ProductCardCombo";
 import styles from "./ProductList.module.css";
 import banner from "../../../assets/images/banner_shop.png";
+import {useDispatch} from "react-redux";
+import {addToCart} from "../../../store/cartSlice";
+
 
 const MAX_PRICE = 3_000_000;
 const PAGE_SIZE = 12;
@@ -16,6 +19,7 @@ const PAGE_SIZE = 12;
 const ProductList = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const dispatch = useDispatch();
 
     // Attribute filter (1 group chỉ chọn 1 attribute)
     const [selectedAttributes, setSelectedAttributes] = useState<Record<number, number>>({});
@@ -27,7 +31,7 @@ const ProductList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const location = useLocation();
     // URL params
-    const { slug: categorySlug } = useParams<{ slug?: string }>();
+    const {slug: categorySlug} = useParams<{ slug?: string }>();
     const [searchParams] = useSearchParams();
 
     // search keyword (?search=abc)
@@ -58,10 +62,14 @@ const ProductList = () => {
         categoryService.getAll().then(setCategories);
     }, [categorySlug, keyword]);
 
+    const handleAddToCart = (product: Product) => {
+        dispatch(addToCart({productId: product.id, quantity: 1}));
+    };
+
     // chọn attribute (1 group = 1 value)
     const handleAttributeChange = (groupId: number, attrId: number) => {
         setSelectedAttributes(prev => {
-            const next = { ...prev };
+            const next = {...prev};
             if (attrId === 0) {
                 delete next[groupId];
             } else {
@@ -123,7 +131,7 @@ const ProductList = () => {
             className={styles.container}>
             {/*Banner*/}
             <div className={styles.banner}>
-                <img src={banner} className={styles.imgbanner} />
+                <img src={banner} className={styles.imgbanner}/>
             </div>
             {/*sidebar*/}
             <div className={styles.wrapper}>
@@ -134,23 +142,24 @@ const ProductList = () => {
                     priceRange={priceRange}
                     onPriceChange={setPriceRange}
                     selectedType={selectedType}
-                    onTypeChange={() => {}}
+                    onTypeChange={() => {
+                    }}
                 />
                 {/*Danh saách sản phẩm*/}
                 <div className={styles.content}>
                     <div className={styles.grid}>
                         {paginatedProducts.map(p =>
                             p.type === "combo" ? (
-                                <ProductCardCombo key={p.id} product={p} />
+                                <ProductCardCombo key={p.id} product={p}onAddToCart={() => handleAddToCart(p)}/>
                             ) : (
-                                <ProductCard key={p.id} product={p} />
+                                <ProductCard key={p.id} product={p}onAddToCart={() => handleAddToCart(p)}/>
                             )
                         )}
                     </div>
 
                     {totalPages > 1 && (
                         <div className={styles.pagination}>
-                            {Array.from({ length: totalPages }).map((_, i) => (
+                            {Array.from({length: totalPages}).map((_, i) => (
                                 <button
                                     key={i}
                                     onClick={() => setCurrentPage(i + 1)}

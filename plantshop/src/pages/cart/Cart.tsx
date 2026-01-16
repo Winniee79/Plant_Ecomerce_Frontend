@@ -198,7 +198,7 @@ const Cart = () => {
                             {/* Thông báo lỗi */}
                             {showError && (
                                 <p className={styles.errorMessage}>
-                                    Vui lòng chọn ít nhất 1 sản phẩm để thanh toán
+                                    ⚠  Vui lòng chọn ít nhất 1 sản <br/>  phẩm để thanh toán
                                 </p>
                             )}
                         </div>

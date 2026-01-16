@@ -2,13 +2,27 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { WishlistItem } from "../types/wishlist.type";
 import type { RootState } from "./index";
 
+const STORAGE_KEY = "wishlist_items";
+
+const loadFromStorage = (): WishlistItem[] => {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    } catch {
+        return [];
+    }
+};
+
+const saveToStorage = (items: WishlistItem[]) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+};
 
 type WishlistState = {
     items: WishlistItem[];
 };
 
 const initialState: WishlistState = {
-    items: [],
+    items: loadFromStorage(),
 };
 
 const wishlistSlice = createSlice({
@@ -17,6 +31,7 @@ const wishlistSlice = createSlice({
     reducers: {
         setWishlist(state, action: PayloadAction<WishlistItem[]>) {
             state.items = action.payload;
+            saveToStorage(state.items);
         },
 
         addToWishlist(state, action: PayloadAction<WishlistItem>) {
@@ -25,6 +40,7 @@ const wishlistSlice = createSlice({
             );
             if (!exists) {
                 state.items.push(action.payload);
+                saveToStorage(state.items);
             }
         },
 
@@ -32,6 +48,7 @@ const wishlistSlice = createSlice({
             state.items = state.items.filter(
                 i => i.product_id !== action.payload
             );
+            saveToStorage(state.items);
         },
     },
 });

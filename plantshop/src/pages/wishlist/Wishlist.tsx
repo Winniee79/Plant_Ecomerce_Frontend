@@ -15,6 +15,10 @@ const Wishlist = () => {
         (state: RootState) => state.product.items
     );
 
+    const handleAddToCart = (productId: number) => {
+        dispatch(addToCart({productId, quantity: 1}));
+    };
+
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Sản phẩm yêu thích</h1>
@@ -52,15 +56,10 @@ const Wishlist = () => {
 
                                     <button
                                         className={styles.addCart}
-                                        onClick={() =>
-                                            dispatch(addToCart({
-                                                productId: product.id,
-                                                quantity: 1,
-                                            }))
-                                        }>
+                                        onClick={() => handleAddToCart(product.id)}
+                                    >
                                         Thêm vào giỏ hàng
                                     </button>
-
                                 </div>
                             );
                         })}

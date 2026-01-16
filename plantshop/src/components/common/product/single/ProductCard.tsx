@@ -2,8 +2,14 @@ import type {ProductBase} from "../../../../types/product.type.ts";
 import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
 import {Link, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
+import type {RootState} from "../../../../store";
 import type {CartViewItem} from "../../../../types/cart.type";
+import {addToWishlist, removeFromWishlist,} from "../../../../store/wishlistSlice";
+import {getFinalPrice} from "../../../../utils/getFinalPrice";
+import type {ProductApi} from "../../../../types/product-api.type";
+import {useMemo} from "react";
 
 type Props = {
     product: ProductBase;
@@ -15,34 +21,42 @@ type Props = {
 
 const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     // popup mua ngay
     const [showBuyNow, setShowBuyNow] = useState(false);
     const [quantity, setQuantity] = useState(1);
-
+    const basePrice = product.salePrice ?? product.price;
     const salePrice = product.salePrice ?? null;
     const hasSale =
         typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
 
     // sp yêu thích
-    const [isFavorite, setIsFavorite] = useState(false);
-    /* load favorite từ localStorage */
+    const wishlistItems = useSelector(
+        (state: RootState) => state.wishlist.items
+    );
+    const isFavorite = wishlistItems.some(
+        item => item.product_id === product.id
+    );    /* load favorite từ localStorage */
 
     // lưu sp yêu thích vào local storage
     const toggleFavorite = (e: React.MouseEvent) => {
-        e.preventDefault(); //chặn click link sp
+        e.preventDefault();
         e.stopPropagation();
 
-        setIsFavorite(prev => {
-            const next = !prev;
-
-            if (next) {
-                localStorage.setItem(`favorite-${product.slug}`, "1");
-            } else {
-                localStorage.removeItem(`favorite-${product.slug}`);
-            }
-            return next;
-        });
+        if (isFavorite) {
+            dispatch(removeFromWishlist(product.id));
+        } else {
+            dispatch(
+                addToWishlist({
+                    id: Date.now(),          // fake id cho client
+                    user_id: 0,              // guest user
+                    product_id: product.id,
+                    created_at: new Date().toISOString(),
+                })
+            );
+        }
     };
+
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -57,15 +71,21 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
         setShowBuyNow(true);
     };
 
+    const priceInfo = useMemo(() => {
+        return getFinalPrice(product as ProductApi, quantity);
+    }, [product, quantity]);
+
     const confirmBuyNow = () => {
         const buyNowItem: CartViewItem = {
             id: Date.now(),
             productId: product.id,
             name: product.name,
             image: product.image,
-            price: salePrice ?? product.price,
-            original_price: product.price,
+            price: priceInfo.price,
+            original_price: basePrice,
             quantity,
+            isWholesale: priceInfo.isWholesale,
+            wholesaleMin: priceInfo.wholesaleMin,
         };
 
         localStorage.setItem("buy_now_order", JSON.stringify([buyNowItem]));
@@ -95,21 +115,23 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
                     <h3 className={styles.name}>{product.name}</h3>
                 </Link>
                 <p className={styles.price}>
-                    {hasSale ? (
+                    {priceInfo.isWholesale ? (
                         <>
-            <span className={styles.originalPrice}>
-              {formatPrice(product.price)}
-            </span>
+      <span className={styles.originalPrice}>
+        {formatPrice(product.price)}
+      </span>
                             <span className={styles.salePrice}>
-              {formatPrice(salePrice as number)}
-            </span>
+        {formatPrice(priceInfo.price)}
+      </span>
+                            <span className={styles.wholesaleBadge}>Giá sỉ</span>
                         </>
                     ) : (
                         <span className={styles.onlyPrice}>
-            {formatPrice(product.price)}
-          </span>
+      {formatPrice(priceInfo.price)}
+    </span>
                     )}
                 </p>
+
                 <button className={styles.buyBtn} onClick={openBuyNow}>
                     Mua ngay
                 </button>
@@ -120,10 +142,33 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
                 <div className={styles.overlay} onClick={() => setShowBuyNow(false)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
                         <h3>{product.name}</h3>
+
+                        {/* ===== GIÁ ĐỘNG THEO SỐ LƯỢNG ===== */}
                         <p className={styles.modalPrice}>
-                            {formatPrice(salePrice ?? product.price)}
+                            {priceInfo.isWholesale ? (
+                                <>
+                        <span className={styles.oldPrice}>
+                            {formatPrice(basePrice)}
+                        </span>
+                                    <span className={styles.newPrice}>
+                            {formatPrice(priceInfo.price)}
+                        </span>
+                                    <span className={styles.wholesaleBadge}>Giá sỉ</span>
+                                </>
+                            ) : (
+                                <>
+                    <span className={styles.newPrice}>
+                        {formatPrice(priceInfo.price)}
+                    </span>
+                                    {priceInfo.wholesaleMin && (
+                                        <span className={styles.wholesaleHint}>
+                            Mua ≥ {priceInfo.wholesaleMin} để được giá sỉ
+                        </span>)}
+                                </>
+                            )}
                         </p>
 
+                        {/* ===== SỐ LƯỢNG ===== */}
                         <div className={styles.qtyRow}>
                             <button onClick={() => setQuantity(q => Math.max(1, q - 1))}>−</button>
                             <span>{quantity}</span>
