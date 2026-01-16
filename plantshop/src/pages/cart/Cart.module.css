@@ -240,3 +240,29 @@ Button {
     color: #ffffff;
     border-color: #2f6331;
 }
+
+.oldPrice {
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 6px;
+    font-size: 13px;
+}
+
+.newPrice {
+    font-weight: 600;
+}
+
+.wholesaleBadge {
+    background: red;
+    color: white;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+}
+
+.tooltip {
+    margin-left: 6px;
+    cursor: help;
+    color: #888;
+}

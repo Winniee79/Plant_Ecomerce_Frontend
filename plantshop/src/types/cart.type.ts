@@ -34,4 +34,6 @@ export interface CartViewItem {
     price: number;            // giá đã áp sale
     original_price?: number;  // giá gốc (optional)
     quantity: number;
+    isWholesale?: boolean;
+    wholesaleMin?: number;
 }

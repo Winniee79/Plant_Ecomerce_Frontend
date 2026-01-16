@@ -297,7 +297,7 @@ const Checkout = () => {
                             </div>
                         ))}
                         <div className={styles.cartTotalRow}>
-                            <span>Tạm tính</span>
+                            <span>Tổng tiền hàng</span>
                             <span>{productTotal.toLocaleString()}₫</span>
                         </div>
                     </div>
