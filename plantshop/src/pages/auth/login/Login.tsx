@@ -150,7 +150,7 @@ const Login = () => {
                             </svg>
                         </div>
 
-                        <h3 className={styles.successTitle}>Đăngg nhập thành công!</h3>
+                        <h3 className={styles.successTitle}>Đăng nhập thành công!</h3>
                         <p className={styles.successText}>
                             Đang chuyển hướng về trang chủ
                         </p>

@@ -4,10 +4,8 @@ export type OrderStatus =
     | "packing"
     | "shipping"
     | "done"
-    | "paid"
     | "success"
     | "cancelled"
-    | "failed"
 
 // Định nghĩa thông tin sản phẩm snapshot
 export type ProductSnapshot = {

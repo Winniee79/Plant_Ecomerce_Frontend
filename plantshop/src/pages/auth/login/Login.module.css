@@ -17,6 +17,7 @@
     font-size: 28px;
     font-weight: 600;
     text-align: center;
+    margin-top: 0;
     margin-bottom: 36px;
     color: #3b823e;
 }
@@ -82,7 +83,7 @@
     padding: 30px;
     border-radius: 12px;
     text-align: center;
-    width: 280px;
+    width: 300px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.3s ease-out;
 }
