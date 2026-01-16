@@ -64,7 +64,7 @@ const Productdetail = () => {
 
         if (product.type === "pot") {
             if (!selectedVariant) {
-                alert("Vui lòng chọn màu và kích thước trước khi thêm wishlist");
+                alert("Vui lòng chọn màu và kích thước trước khi thêm vào yêu thích");
                 return;
             }
 
@@ -91,7 +91,7 @@ const Productdetail = () => {
             }
         } else {
             if (isFavorite) {
-                dispatch(removeFromWishlist({productId: product.id}));
+                dispatch(removeFromWishlist({ productId: product.id }));
             } else {
                 dispatch(
                     addToWishlist({
@@ -163,18 +163,20 @@ const Productdetail = () => {
                 return;
             }
 
-            dispatch(addToCart({
-                productId: product.id,
-                quantity,
-                variant: {
-                    id: selectedVariant.id,
-                    name: `${selectedVariant.color} - ${selectedVariant.size}`,
-                    price: selectedVariant.price,
-                    image: selectedVariant.image,
-                },
-            }));
+            dispatch(
+                addToCart({
+                    productId: product.id,
+                    quantity,
+                    variant: {
+                        id: selectedVariant.id,
+                        name: `${selectedVariant.color} - ${selectedVariant.size}`,
+                        price: selectedVariant.price,
+                        image: selectedVariant.image,
+                    },
+                })
+            );
         } else {
-            dispatch(addToCart({productId: product.id, quantity}));
+            dispatch(addToCart({ productId: product.id, quantity }));
         }
     };
 

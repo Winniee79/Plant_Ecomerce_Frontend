@@ -3,22 +3,22 @@ import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import { useState, useMemo } from "react";
+import {useState, useMemo} from "react";
 import type {RootState} from "../../../../store";
 import type {CartViewItem} from "../../../../types/cart.type";
 import {addToWishlist, removeFromWishlist,} from "../../../../store/wishlistSlice";
 import {getFinalPrice} from "../../../../utils/getFinalPrice";
 import type {ProductApi} from "../../../../types/product-api.type";
+import {addToCart} from "../../../../store/cartSlice";
 
 type Props = {
     product: ProductBase;
     isNew?: boolean;     //Đánh dấu sp new
     isSale?: boolean;
     isTrending?: boolean;
-    onAddToCart?: () => void;
 }; // Đánh dấu sp sale
 
-const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) => {
+const ProductCard = ({product, isNew, isSale, isTrending}: Props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     // popup mua ngay
@@ -31,7 +31,6 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
 
     // sp yêu thích
     const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
-
     const isFavorite = wishlistItems.some(
         item => item.product_id === product.id && item.variant_id == null
     );
@@ -39,6 +38,12 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
     const toggleFavorite = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
+        // Nếu là pot, bắt chọn variant
+        if (product.type === "pot") {
+            navigate(`/products/${product.slug}`);
+            return;
+        }
 
         if (isFavorite) {
             dispatch(
@@ -68,11 +73,18 @@ const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart}: Props) =
         return getFinalPrice(product as ProductApi, quantity);
     }, [product, quantity]);
 
-    const handleAddToCart = (e: React.MouseEvent) => {
+    const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        onAddToCart?.();
+
+        if (product.type === "pot") {
+            navigate(`/products/${product.slug}`);
+            return;
+        }
+
+        dispatch(addToCart({productId: product.id, quantity: 1}));
     };
+
 
     // Mua ngay, sang trang thanh toán
     const openBuyNow = (e: React.MouseEvent) => {

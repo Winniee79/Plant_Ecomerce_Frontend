@@ -1,9 +1,10 @@
 import styles from "./Wishlist.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../store";
-import { removeFromWishlist } from "../../store/wishlistSlice";
-import { addToCart } from "../../store/cartSlice";
-import type { PotVariant, Product } from "../../types/product.type";
+import {useDispatch, useSelector} from "react-redux";
+import type {RootState} from "../../store";
+import {removeFromWishlist} from "../../store/wishlistSlice";
+import {addToCart} from "../../store/cartSlice";
+import type {PotVariant, Product} from "../../types/product.type";
+import {useNavigate} from "react-router-dom";
 
 type ProductWithVariants = Product & { variants?: PotVariant[] };
 
@@ -12,7 +13,7 @@ const hasVariants = (p: Product): p is ProductWithVariants =>
 
 const Wishlist = () => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const wishlistItems = useSelector(
         (state: RootState) => state.wishlist.items
     );
@@ -21,10 +22,15 @@ const Wishlist = () => {
         (state: RootState) => state.product.items
     );
 
-    const handleAddToCart = (productId: number, variant?: PotVariant) => {
+    const handleAddToCart = (product: Product, variant?: PotVariant) => {
+        if (hasVariants(product) && !variant) {
+            navigate(`/products/${product.slug}`);
+            return;
+        }
+
         dispatch(
             addToCart({
-                productId,
+                productId: product.id,
                 quantity: 1,
                 variant: variant
                     ? {
@@ -75,11 +81,9 @@ const Wishlist = () => {
                                     </button>
 
                                     <div className={styles.product}>
-                                        <img src={variant?.image ?? product.image} />
-                                        <span>
-                      {product.name}
-                                            {variant && ` – ${variant.color} ${variant.size}`}
-                    </span>
+                                        <img src={variant?.image ?? product.image}/>
+                                        <span>{product.name} {variant && ` (${variant.color} - ${variant.size})`}</span>
+
                                     </div>
 
                                     <div className={styles.price}>
@@ -88,12 +92,11 @@ const Wishlist = () => {
 
                                     <button
                                         className={styles.addCart}
-                                        onClick={() =>
-                                            handleAddToCart(item.product_id, variant)
-                                        }
+                                        onClick={() => handleAddToCart(product, variant)}
                                     >
                                         Thêm vào giỏ hàng
                                     </button>
+
                                 </div>
                             );
                         })}

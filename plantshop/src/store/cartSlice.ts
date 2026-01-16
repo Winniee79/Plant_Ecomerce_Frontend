@@ -42,13 +42,20 @@ const cartSlice = createSlice({
             const product = productList.find(p => p.id === productId);
             if (!product) return;
 
+            // CHẶN tuyệt đối nếu sản phẩm có variant mà không truyền variant
+            if (product.type === "pot" && !variant) {
+
+                console.warn("Must select variant before adding to cart");
+                return;
+            }
+
             const result = getFinalPrice(product, quantity);
-            const basePrice = variant?.price ?? result.price;
+            const basePrice = variant ? variant.price : result.price;
 
             const existing = state.items.find(
-                item =>
-                    item.productId === productId &&
-                    (variant ? item.variantId === variant.id : !item.variantId)
+                i =>
+                    i.productId === productId &&
+                    (variant ? i.variantId === variant.id : i.variantId == null)
             );
 
             if (existing) {
@@ -56,6 +63,7 @@ const cartSlice = createSlice({
 
                 const updated = getFinalPrice(product, existing.quantity);
 
+                // Chỉ áp wholesale cho product thường (không variant)
                 if (!variant) {
                     existing.price = updated.price;
                 }
