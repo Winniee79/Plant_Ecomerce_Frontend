@@ -76,6 +76,38 @@ export interface ProductInfor {
     careGuide: string;
 }
 
+export interface SeedDetail {
+    germinationRate: string;
+    harvestTime: string;
+    water: string;
+    sowingSeason: string;
+    difficulty: string;
+}
+
+export interface PotDetail {
+    material: string;
+    pattern?: string;
+}
+
+export interface PotVariant {
+    id: number;
+    color: string;
+    size: string;
+    volume: string;
+    stock: number;
+    price: number;
+    image: string;
+}
+export interface SuppliesDetail {
+    commonName: string;
+    origin: string;
+    material: string;
+    application: string;
+    packaging: string;
+    volume?: string | null;
+}
+
+
 // Kế thừa Product list, thêm tất cả field detail
 export interface ProductDetail extends ProductBase {
     description: string;
@@ -88,6 +120,10 @@ export interface ProductDetail extends ProductBase {
     images: ProductImage[];
     dimensions?: ProductDimensions;
     plantDetail?: PlantDetail;
+    seedDetail?: SeedDetail;
+    potDetail?: PotDetail;
+    variants?: PotVariant[];
+    suppliesDetail?: SuppliesDetail;
     wholesalePrices?: WholesalePrice[];
     infor?: ProductInfor;
 }

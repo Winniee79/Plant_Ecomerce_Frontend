@@ -81,7 +81,7 @@ export const productHandlers = [
         const search = url.searchParams.get("search")?.toLowerCase();
         // Không có search → trả tất cả
         if (!search) {
-            return HttpResponse.json(data.products);
+            return HttpResponse.json(datapro.products);
         }
         // Có search → lọc theo tên
         const keyword = normalize(search);

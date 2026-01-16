@@ -8,6 +8,10 @@ import ReactMarkdown from "react-markdown";
 import ProductCard from "../../../components/common/product/single/ProductCard.tsx";
 import { reviewService } from "../../../services/review.service";
 import type { Review } from "../../../types/review.type";
+import PlantSpecs from "./components/PlantSpecs.tsx";
+import SeedSpecs from "./components/SeedSpecs.tsx";
+import PotSpecs from "./components/PotSpecs.tsx";
+import SuppliesSpecs from "./components/SuppliesSpecs.tsx";
 
 const Productdetail = () => {
     // const { id } = useParams<{ id: string }>();
@@ -23,6 +27,7 @@ const Productdetail = () => {
     //const [loadingReview, setLoadingReview] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [newRating, setNewRating] = useState(5);
+
     const user = { id: 999, name: "Khách hàng", avatar: "https://i.pravatar.cc/60?img=50" }; // demo user
     useEffect(() => {
             if (!slug) return;
@@ -111,6 +116,28 @@ const Productdetail = () => {
         }
     };
 
+    const renderSpecs = () => {
+        switch (product.type) {
+            case "plant":
+                return <PlantSpecs detail={product.plantDetail} />;
+
+            case "seed":
+                return <SeedSpecs detail={product.seedDetail} />;
+
+            case "pot":
+                return (<PotSpecs
+                        detail={product.potDetail}
+                        variants={product.variants}
+                    />);
+            case "supplies":
+                return (<SuppliesSpecs
+                        detail={product.suppliesDetail}
+                    />);
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.main}>
@@ -188,32 +215,33 @@ const Productdetail = () => {
 
                     <div className={styles.productSpecs}>
                         {/* BẢNG 1 – THÔNG TIN CÂY */}
-                        <div className={styles.specTable}>
-                            <div className={styles.specRow}>
-                                <span><strong>Tên thường gọi</strong></span>
-                                <span>{product.plantDetail?.commonName}</span>
-                            </div>
+                        {/*<div className={styles.specTable}>*/}
+                        {/*    <div className={styles.specRow}>*/}
+                        {/*        <span><strong>Tên thường gọi</strong></span>*/}
+                        {/*        <span>{product.plantDetail?.commonName}</span>*/}
+                        {/*    </div>*/}
 
-                            <div className={styles.specRow}>
-                                <span><strong>Tên Khoa học</strong></span>
-                                <span>{product.plantDetail?.scientificName}</span>
-                            </div>
+                        {/*    <div className={styles.specRow}>*/}
+                        {/*        <span><strong>Tên Khoa học</strong></span>*/}
+                        {/*        <span>{product.plantDetail?.scientificName}</span>*/}
+                        {/*    </div>*/}
 
-                            <div className={styles.specRow}>
-                                <span><strong>Độ khó chăm sóc</strong></span>
-                                <span>{product.plantDetail?.difficulty}</span>
-                            </div>
+                        {/*    <div className={styles.specRow}>*/}
+                        {/*        <span><strong>Độ khó chăm sóc</strong></span>*/}
+                        {/*        <span>{product.plantDetail?.difficulty}</span>*/}
+                        {/*    </div>*/}
 
-                            <div className={styles.specRow}>
-                                <span><strong>Nhu cầu ánh sáng</strong></span>
-                                <span>{product.plantDetail?.light}</span>
-                            </div>
+                        {/*    <div className={styles.specRow}>*/}
+                        {/*        <span><strong>Nhu cầu ánh sáng</strong></span>*/}
+                        {/*        <span>{product.plantDetail?.light}</span>*/}
+                        {/*    </div>*/}
 
-                            <div className={styles.specRow}>
-                                <span><strong>Nhu cầu nước</strong></span>
-                                <span>{product.plantDetail?.water}</span>
-                            </div>
-                        </div>
+                        {/*    <div className={styles.specRow}>*/}
+                        {/*        <span><strong>Nhu cầu nước</strong></span>*/}
+                        {/*        <span>{product.plantDetail?.water}</span>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
+                        {renderSpecs()}
 
                         {/* BẢNG 2 – QUY CÁCH */}
                         <div className={styles.specTable}>
@@ -222,21 +250,21 @@ const Productdetail = () => {
                                 <span>{product.dimensions?.weight}</span>
                             </div>
                             <div className={styles.specRow}>
-                                <span><strong>Chiều cao</strong></span>
+                                <span><strong>Chiều cao:</strong></span>
                                 <span>{product.dimensions?.totalHeight}</span>
                             </div>
 
                             <div className={styles.specRow}>
-                                <span><strong>Độ rộng tán cây</strong></span>
+                                <span><strong>Độ rộng sản phẩm:</strong></span>
                                 <span>{product.dimensions?.canopyWidth}</span>
                             </div>
                             <div className={styles.specRow}>
-                                <span><strong>Đường kính chậu</strong></span>
+                                <span><strong>Đường kính chậu:</strong></span>
                                 <span>{product.dimensions?.potWidth}</span>
                             </div>
 
                             <div className={styles.specRow}>
-                                <span><strong>Chiều cao chậu</strong></span>
+                                <span><strong>Chiều cao chậu: </strong></span>
                                 <span>{product.dimensions?.potHeight}</span>
                             </div>
 
