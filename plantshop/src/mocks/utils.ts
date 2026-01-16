@@ -35,3 +35,14 @@ export const getUserFromRequest = (request: Request): User | null => {
 
     return users.find(u => u.id === session.userId) || null;
 };
+export const isLoggedIn = (): boolean => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return false;
+
+    const sessions = JSON.parse(
+        localStorage.getItem(SESSION_STORAGE_KEY) || "[]"
+    ) as Session[];
+
+    const session = sessions.find(s => s.token === token);
+    return !!session && Date.now() <= session.expiry;
+};

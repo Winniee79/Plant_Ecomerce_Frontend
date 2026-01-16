@@ -1,9 +1,9 @@
-import type {ProductApi} from "../types/product-api.type.ts";
+import type { ProductApi } from "../types/product-api.type";
 
 export function getFinalPrice(product: ProductApi, quantity: number) {
-    const rules = product.wholesalePrices;
+    const rules = product.wholesalePrices?.filter(w => w.min > 1);
 
-    if (!rules?.length) {
+    if (!rules || rules.length === 0) {
         return {
             price: product.salePrice ?? product.price,
             isWholesale: false,

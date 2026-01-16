@@ -1,15 +1,19 @@
 import type {ProductBase} from "../../../../types/product.type.ts";
-import { formatPrice } from "../../../../utils/formatPrice.ts";
+import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCard.module.css";
 import {Link} from "react-router-dom";
 import {useState} from "react";
 
-type Props = { product: ProductBase;
-                isNew?: boolean;     //Đánh dấu sp new
-                isSale?: boolean;
-                isTrending?: boolean;}; // Đánh dấu sp sale
+type Props = {
+    product: ProductBase;
+    isNew?: boolean;     //Đánh dấu sp new
+    isSale?: boolean;
+    isTrending?: boolean;
+    onAddToCart?: () => void;
+    onBuyNow?: () => void;
+}; // Đánh dấu sp sale
 
-const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
+const ProductCard = ({product, isNew, isSale, isTrending, onAddToCart,onBuyNow}: Props) => {
     const salePrice = product.salePrice ?? null;
     const hasSale =
         typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
@@ -34,6 +38,18 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
             return next;
         });
     };
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onAddToCart?.();
+    };
+
+    // Mua ngay, sang trang thanh toán
+    const handleBuyNow = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onBuyNow?.();
+    };
     return (
         <div className={styles.card}>
             {isNew && <span className={styles.newBadge}>NEW</span>}
@@ -46,14 +62,14 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
             </button>
 
             {/* ADD TO CART */}
-            <button className={styles.cartBtn}>
+            <button className={styles.cartBtn} onClick={handleAddToCart}>
                 <i className="fa-solid fa-cart-plus"></i>
             </button>
             <Link to={`/products/${product.slug}`} className={styles.productLink}>
-            <img src={product.image}
-                alt={product.name}
-                className={styles.image}/>
-            <h3 className={styles.name}>{product.name}</h3>
+                <img src={product.image}
+                     alt={product.name}
+                     className={styles.image}/>
+                <h3 className={styles.name}>{product.name}</h3>
             </Link>
             <p className={styles.price}>
                 {hasSale ? (
@@ -71,7 +87,9 @@ const ProductCard = ({ product, isNew, isSale, isTrending }: Props) => {
           </span>
                 )}
             </p>
-            <button className={styles.buyBtn}>Mua ngay</button>
+            <button className={styles.buyBtn} onClick={handleBuyNow}>
+                Mua ngay
+            </button>
         </div>
     );
 };

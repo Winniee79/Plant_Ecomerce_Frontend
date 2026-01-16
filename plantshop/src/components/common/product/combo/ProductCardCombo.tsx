@@ -1,11 +1,15 @@
-import type { Product } from "../../../../types/product.type.ts";
-import { formatPrice } from "../../../../utils/formatPrice.ts";
+import type {Product} from "../../../../types/product.type.ts";
+import {formatPrice} from "../../../../utils/formatPrice.ts";
 import styles from "./ProductCardCombo.module.css";
 import {useState} from "react";
 
-type Props = { product: Product; };
+type Props = {
+    product: Product;
+    onAddToCart?: () => void;
+    onBuyNow?: () => void;
+};
 
-const ProductCardCombo = ({ product }: Props) => {
+const ProductCardCombo = ({product, onAddToCart,onBuyNow}: Props) => {
     const salePrice = product.salePrice ?? null;
     const hasSale = typeof salePrice === "number" && salePrice > 0 && salePrice < product.price;
     // Lấy hình ảnh từ 2 item trong combo
@@ -36,6 +40,17 @@ const ProductCardCombo = ({ product }: Props) => {
             return next;
         });
     };
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onAddToCart?.();
+    };
+    //  Mua ngay, sang trang thanh toán
+    const handleBuyNow = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onBuyNow?.();
+    };
     return (
         <div className={styles.comboCard}>
             <div className={styles.imageWrapper}>
@@ -46,8 +61,8 @@ const ProductCardCombo = ({ product }: Props) => {
                 </button>
 
                 {/* ADD TO CART */}
-                <button className={styles.cartBtn}>
-                    <i className="fa-solid fa-cart-plus"></i>
+                <button className={styles.cartBtn} onClick={handleAddToCart}>
+                    <i className="fa-solid fa-cart-plus"/>
                 </button>
                 {hasMainImage ? (
                     // Có image → dùng image
@@ -100,7 +115,7 @@ const ProductCardCombo = ({ product }: Props) => {
                 )}
             </p>
 
-            <button className={styles.buyBtn}>Mua ngay</button>
+            <button className={styles.buyBtn} onClick={handleBuyNow}>Mua ngay</button>
         </div>
     );
 };
