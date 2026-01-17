@@ -1,15 +1,46 @@
 .container {
     min-height: 100vh;
+    background-color: #f0f5f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginForm{
+    width: 900px;
+    max-width: 95vw;
+    height: 500px;
+    background: #fff;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin: 5vh auto;
+    overflow: hidden;
+}
+
+/* Cột Trái: Ảnh */
+.imageWrapper {
+    flex: 1;
+}
+
+.sideImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Cột Phải: Form */
+.loginWrapper {
+    flex: 1;
+    padding: 40px 50px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .form {
-    width: 480px;
-    background-color: #ffffff;
-    padding: 48px 56px;
-    border-radius: 10px;
+    width: 100%;
 }
 
 .title {
@@ -63,6 +94,21 @@
     opacity: 0.9;
 }
 
+/* Quên mật khẩu */
+.forgotPasswordLink {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+}
+
+.forgotPasswordLink:hover {
+    color: #3b823e;
+    text-decoration: underline;
+}
+
 /*Modal Thông Báo Thành Công*/
 .modalOverlay {
     position: fixed;
@@ -70,7 +116,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Nền đen mờ */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -134,9 +180,4 @@
 
 h3::after{
     background: none;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
