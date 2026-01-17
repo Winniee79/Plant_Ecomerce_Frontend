@@ -6,7 +6,6 @@ import type {Product, ProductType} from "../../../types/product.type";
 import type {Category} from "../../../types/category.type";
 import FilterSidebar from "./components/FilterSidebar";
 import ProductCard from "../../../components/common/product/single/ProductCard";
-import ProductCardCombo from "../../../components/common/product/combo/ProductCardCombo";
 import styles from "./ProductList.module.css";
 import banner from "../../../assets/images/banner_shop.png";
 import {useDispatch} from "react-redux";
@@ -204,7 +203,6 @@ const ProductList = () => {
                             )
                         )}
                     </div>
-
                     {totalPages > 1 && (
                         <div className={styles.pagination}>
                             {Array.from({length: totalPages}).map((_, i) => (

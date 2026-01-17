@@ -3,27 +3,20 @@ export type OrderStatus =
     | "confirmed"
     | "packing"
     | "shipping"
-    | "done"
     | "success"
-    | "cancelled"
-
-// Định nghĩa thông tin sản phẩm snapshot
-export type ProductSnapshot = {
-    name: string;
-    imageUrl?: string;
-};
+    | "cancelled";
 
 export type OrderItem = {
-    id: number;
+    id: number | string;
     order_id?: string;
     product_id: number;
     quantity: number;
     price: number;
-
-    // Các trường snapshot từ Cart để hiển thị
+    original_price?: number;
     name?: string;
-    imageUrl?: string;
-    productInfo?: ProductSnapshot;
+    image?: string;
+    created_at?: string;
+    updated_at?: string;
 };
 
 export type Order = {
@@ -41,7 +34,6 @@ export type Order = {
     status: OrderStatus;
     created_at: string;
 
-    // Mảng items lưu nested trong localStorage
     items?: OrderItem[];
     itemsDetail?: OrderItem[];
 
