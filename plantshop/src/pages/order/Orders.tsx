@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Orders.module.css';
 import { useNavigate } from 'react-router-dom';
-import type { Order, OrderStatus } from '../../types/order.type';
+import type { Order, OrderStatus, OrderItem } from '../../types/order.type';
 
 const ITEMS_PER_PAGE = 3;
 
-// TabStatus
 type TabStatus = 'processing' | 'shipping' | 'completed' | 'cancelled';
 
 const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
 
+// Ánh xạ trạng thái thực tế của Đơn hàng sang Tab hiển thị chỉ 4 trạng thái
 const mapBackendStatusToTab = (status: OrderStatus | string): TabStatus => {
     switch (status) {
-        case 'pending': case 'confirmed': case 'packing': case 'unpaid': case 'processing': return 'processing';
-        case 'shipping': case 'shipped': return 'shipping';
-        case 'done': case 'paid': case 'success': case 'delivered': return 'completed';
-        case 'cancelled': case 'failed': case 'refunded': return 'cancelled';
+        case 'pending': case 'confirmed': case 'packing': return 'processing';
+        case 'shipping': return 'shipping';
+        case 'success': return 'completed';
+        case 'cancelled': return 'cancelled';
         default: return 'processing';
     }
 };
@@ -28,49 +28,38 @@ const OrdersPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const navigate = useNavigate();
-
-    // State cho popup hủy
     const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
     const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
 
+    // Xử lý khi người dùng click đổi Tab
     const handleTabChange = (tab: TabStatus) => {
         setActiveTab(tab);
         setCurrentPage(1);
     };
 
-    // LOAD DATA TỪ LOCALSTORAGE
+    // Load dữ liệu từ LocalStorage
     const fetchOrders = () => {
         try {
             const storedUser = localStorage.getItem("user");
-            const currentUser = storedUser ? JSON.parse(storedUser).user : null;
-
+            const currentUser = storedUser ? JSON.parse(storedUser).user : null
             const storedOrders = localStorage.getItem('orders');
+            const storedItems = localStorage.getItem('order_items');
+
+            // Parse và ép kiểu cho Items --> OrderItem[]
+            const allOrderItems = storedItems ? (JSON.parse(storedItems) as OrderItem[]) : [];
 
             if (storedOrders) {
                 const parsedOrders = JSON.parse(storedOrders) as Order[];
-
-                // Lọc theo user
                 const myOrders = currentUser
                     ? parsedOrders.filter(o => String(o.user_id) === String(currentUser.id))
                     : [];
 
-                // Map dữ liệu
+                // Gắn danh sách items vào trường itemsDetail của đơn hàng.
                 const processedOrders: Order[] = myOrders.map((order) => {
-                    const originalItems = order.items || [];
-
-                    // Map item để có field productInfo
-                    const itemsMapped = originalItems.map((item) => ({
-                        ...item,
-                        productInfo: {
-                            name: item.name || "Sản phẩm",
-                            imageUrl: item.imageUrl || 'https://via.placeholder.com/80'
-                        }
-                    }));
-
-                    return { ...order, itemsDetail: itemsMapped };
+                    const itemsDetail = allOrderItems.filter((item) => item.order_id === order.id);
+                    return { ...order, itemsDetail };
                 });
 
-                // Sắp xếp mới nhất
                 processedOrders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
                 setOrders(processedOrders);
             }
@@ -85,10 +74,12 @@ const OrdersPage: React.FC = () => {
             fetchOrders();
             setIsLoading(false);
         }, 300);
+
         return () => clearTimeout(timer);
     }, []);
 
-    // Logic Hủy đơn
+    // LOGIC HỦY ĐƠN HÀNG
+
     const onOpenCancelModal = (orderId: string) => {
         setOrderToCancel(orderId);
         setShowCancelModal(true);
@@ -96,9 +87,13 @@ const OrdersPage: React.FC = () => {
 
     const handleConfirmCancel = () => {
         if (!orderToCancel) return;
+
+        // Đọc lại dữ liệu mới nhất từ storage (để tránh race condition đơn giản)
         const storedOrders = localStorage.getItem('orders');
         if (storedOrders) {
             const allOrders = JSON.parse(storedOrders) as Order[];
+
+            // Tìm đơn hàng cần hủy và cập nhật status
             const updatedOrders = allOrders.map((o) => {
                 if (String(o.id) === String(orderToCancel)) {
                     return { ...o, status: 'cancelled' as OrderStatus };
@@ -108,15 +103,18 @@ const OrdersPage: React.FC = () => {
             localStorage.setItem('orders', JSON.stringify(updatedOrders));
             fetchOrders();
         }
-        setShowCancelModal(false);
+        setShowCancelModal(false)
         setOrderToCancel(null);
     };
+
+    // LOGIC PHÂN TRANG
 
     const filteredOrders = orders.filter((order) => mapBackendStatusToTab(order.status) === activeTab);
     const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const currentOrders = filteredOrders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+    // Xử lý chuyển trang
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
@@ -135,6 +133,8 @@ const OrdersPage: React.FC = () => {
     return (
         <div className={styles.container}>
             <h1 className={styles.pageTitle}>Đơn Hàng Của Tôi</h1>
+
+            {/* THANH TAB TRẠNG THÁI */}
             <div className={styles.tabsContainer}>
                 {(['processing', 'shipping', 'completed', 'cancelled'] as TabStatus[]).map((tab) => (
                     <div
@@ -150,17 +150,19 @@ const OrdersPage: React.FC = () => {
                 ))}
             </div>
 
+            {/* DANH SÁCH ĐƠN HÀNG */}
             <div className={styles.ordersList}>
                 {currentOrders.length > 0 ? (
                     currentOrders.map((order) => {
-                        // Dùng itemsDetail đã map ở trên
                         const currentItems = order.itemsDetail || [];
+                        // Chỉ hiển thị tối đa 3 sản phẩm đầu tiên
                         const visibleItems = currentItems.slice(0, 3);
                         const remainingItemsCount = currentItems.length - 3;
                         const currentTab = mapBackendStatusToTab(order.status);
 
                         return (
                             <div key={order.id} className={styles.orderCard}>
+                                {/* Header Card: Mã đơn, ngày đặt, nút bấm */}
                                 <div className={styles.cardHeader}>
                                     <div className={styles.orderIdDate}>
                                         <span className={styles.orderCode}>Đơn hàng #{order.id.substring(0,8).toUpperCase()}</span>
@@ -169,6 +171,7 @@ const OrdersPage: React.FC = () => {
                                         </span>
                                     </div>
                                     <div className={styles.btnGroup}>
+                                        {/* Nút hủy chỉ hiện khi đơn đang ở trạng thái xử lý */}
                                         {currentTab === 'processing' && (
                                             <button
                                                 className={styles.btnCancel}
@@ -186,17 +189,18 @@ const OrdersPage: React.FC = () => {
                                     </div>
                                 </div>
 
+                                {/* Body Card: Danh sách sản phẩm */}
                                 <div className={styles.cardBody}>
                                     {visibleItems.map((item, index) => (
                                         <div key={`${order.id}-${index}`} className={styles.productItem}>
                                             <img
-                                                src={item.productInfo?.imageUrl || 'https://via.placeholder.com/80'}
-                                                alt={item.productInfo?.name}
+                                                src={item.image || 'https://via.placeholder.com/80'}
+                                                alt={item.name || "Sản phẩm"}
                                                 className={styles.productImg}
                                             />
                                             <div className={styles.productInfo}>
                                                 <div className={styles.prodName}>
-                                                    {item.productInfo?.name}
+                                                    {item.name || "Sản phẩm"}
                                                 </div>
                                                 <div className={styles.prodQty}>x{item.quantity}</div>
                                             </div>
@@ -207,30 +211,34 @@ const OrdersPage: React.FC = () => {
                                     ))}
                                 </div>
 
+                                {/* Footer Card: Tổng tiền & Tag xem thêm */}
                                 <div className={styles.cardFooter}>
                                     {remainingItemsCount > 0 ? (
                                         <div className={styles.moreItemsTag}>
                                             + {remainingItemsCount} sản phẩm khác
                                         </div>
                                     ) : (
-                                        <div></div>
+                                        <div></div> // Div rỗng để giữ layout flex
                                     )}
                                     <div className={styles.totalPriceWrapper}>
-                                        Tổng cộng: <span className={styles.totalPriceValue}>{formatCurrency(order.total_amount)}</span>
+                                        Tổng thanh toán: <span className={styles.totalPriceValue}>{formatCurrency(order.total_amount)}</span>
                                     </div>
                                 </div>
                             </div>
                         );
                     })
                 ) : (
+                    // Hiển thị khi không có đơn hàng nào
                     <div style={{ textAlign: 'center', color: '#888', padding: '40px' }}>
                         Chưa có đơn hàng nào trong mục này.
                     </div>
                 )}
             </div>
 
+            {/* PHÂN TRANG */}
             {totalPages > 1 && (
                 <div className={styles.pagination}>
+                    {/* Nút < */}
                     <button
                         className={`${styles.pageBtn} ${currentPage === 1 ? styles.disabled : ''}`}
                         onClick={() => handlePageChange(currentPage - 1)}
@@ -240,6 +248,8 @@ const OrdersPage: React.FC = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                         </svg>
                     </button>
+
+                    {/* Danh sách số trang */}
                     {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                         <button
                             key={page}
@@ -249,6 +259,8 @@ const OrdersPage: React.FC = () => {
                             {page}
                         </button>
                     ))}
+
+                    {/* Nút > */}
                     <button
                         className={`${styles.pageBtn} ${currentPage === totalPages ? styles.disabled : ''}`}
                         onClick={() => handlePageChange(currentPage + 1)}
@@ -261,6 +273,7 @@ const OrdersPage: React.FC = () => {
                 </div>
             )}
 
+            {/* MODAL XÁC NHẬN HỦY */}
             {showCancelModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowCancelModal(false)}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useNavigate, Link} from "react-router-dom"; // 1. Thêm Link vào đây
+import {useNavigate, Link} from "react-router-dom";
 import {AxiosError} from "axios";
 import AuthService from "../../../services/auth.service";
 import styles from "./Login.module.css";
@@ -12,9 +12,9 @@ import type {WishlistItem} from "../../../types/wishlist.type";
 import {setWishlist} from "../../../store/wishlistSlice";
 import {loginSuccess} from "../../../store/authSlice";
 import {addToCart} from "../../../store/cartSlice";
-import type { Session } from "../../../mocks/utils";
+import type {Session} from "../../../mocks/utils";
 
-
+const sideImage = "https://png.pngtree.com/thumb_back/fw800/background/20240718/pngtree-closeup-of-hands-planting-a-young-tree-in-soil-on-blur-image_15984210.jpg";
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -44,24 +44,23 @@ const Login = () => {
 
         try {
             // Gọi auth.service.login()
-            await AuthService.login(credentials);
-
+            const data = await AuthService.login(credentials);
             // Lấy thông tin user vừa lưu để xử lý
-            const storedData = JSON.parse(localStorage.getItem("user") || "{}");
-            const user = storedData.user;
-            const token = storedData.token;
+            const user = data.user;
+            const token = data.token;
             const userId = user?.id;
 
             // Gửi tín hiệu Login thành công cho redux
             if (user && token) {
-                dispatch(loginSuccess({user, token}));
+                dispatch(loginSuccess({ user, token }));
             }
+
             const sessions: Session[] = JSON.parse(
                 localStorage.getItem("plant_shop_sessions") || "[]"
             );
 
             const expiry = Date.now() + 1000 * 60 * 60 * 24; // 24h
-            const newSession: Session = { token, userId, expiry };
+            const newSession: Session = {token, userId, expiry};
 
             localStorage.setItem(
                 "plant_shop_sessions",
@@ -133,77 +132,92 @@ const Login = () => {
 
     return (
         <div className={styles.container}>
-            {/*Form đăng nhập*/}
-            <form className={styles.form} onSubmit={handleSubmit}>
-                <h2 className={styles.title}>Đăng nhập</h2>
-
-                <div className={styles.field}>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Nhập email"
-                        value={credentials.email}
-                        onChange={handleChange}
-                        required
-                    />
+            <div className={styles.loginForm}>
+                {/* Khung chứa ảnh bên trái */}
+                <div className={styles.imageWrapper}>
+                    <img src={sideImage} alt="Login side" className={styles.sideImage}/>
+                    {/* Bạn có thể thêm text đè lên ảnh ở đây nếu cần */}
                 </div>
 
-                <div className={styles.field}>
-                    <label>Mật khẩu</label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Nhập mật khẩu"
-                        value={credentials.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+                {/*Form đăng nhập*/}
+                <div className={styles.loginWrapper}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <h2 className={styles.title}>Đăng nhập</h2>
 
-                {/*Hiển thị lỗi nếu có*/}
-                {error && <p style={{color: 'red', marginBottom: '10px'}}>{error}</p>}
-
-                <button type="submit" className={styles.button}>
-                    Đăng nhập
-                </button>
-
-                {/* đăng ký mới*/}
-                <div className={styles.registerPrompt}>
-                    <span>Bạn chưa có tài khoản? </span>
-                    <Link to="/register" className={styles.registerLink}>
-                        Đăng ký ngay
-                    </Link>
-                </div>
-
-            </form>
-
-            {showSuccessModal && (
-                <div className={styles.modalOverlay}>
-                    <div className={styles.modalContent}>
-                        {/*Icon dấu tích*/}
-                        <div className={styles.iconContainer}>
-                            <svg
-                                width="30"
-                                height="30"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="white"
-                                strokeWidth="3"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
+                        <div className={styles.field}>
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Nhập email"
+                                value={credentials.email}
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
 
-                        <h3 className={styles.successTitle}>Đăng nhập thành công!</h3>
-                        <p className={styles.successText}>
-                            Đang chuyển hướng về trang chủ
-                        </p>
-                    </div>
+                        <div className={styles.field}>
+                            <label>Mật khẩu</label>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Nhập mật khẩu"
+                                value={credentials.password}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        {/*Hiển thị lỗi nếu có*/}
+                        {error && <p style={{color: 'red', marginBottom: '10px'}}>{error}</p>}
+
+                        <button type="submit" className={styles.button}>
+                            Đăng nhập
+                        </button>
+
+                        {/* Quên mật khẩu */}
+                        <a href="#" className={styles.forgotPasswordLink} onClick={(e) => e.preventDefault()}>
+                            Quên mật khẩu?
+                        </a>
+
+                        {/* đăng ký mới*/}
+                        <div className={styles.registerPrompt}>
+                            <span>Bạn chưa có tài khoản? </span>
+                            <Link to="/register" className={styles.registerLink}>
+                                Đăng ký ngay
+                            </Link>
+                        </div>
+
+                    </form>
                 </div>
-            )}
+
+                {showSuccessModal && (
+                    <div className={styles.modalOverlay}>
+                        <div className={styles.modalContent}>
+                            {/*Icon dấu tích*/}
+                            <div className={styles.iconContainer}>
+                                <svg
+                                    width="30"
+                                    height="30"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+
+                            <h3 className={styles.successTitle}>Đăng nhập thành công!</h3>
+                            <p className={styles.successText}>
+                                Đang chuyển hướng về trang chủ
+                            </p>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

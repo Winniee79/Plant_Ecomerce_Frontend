@@ -14,32 +14,29 @@ const OrderDetailsPage: React.FC = () => {
 
     useEffect(() => {
         const loadOrderData = () => {
+            if (!id) return;
             setIsLoading(true);
-            const storedOrders = localStorage.getItem('orders');
 
-            if (storedOrders) {
-                const allOrders = JSON.parse(storedOrders) as Order[];
-                const foundOrder = allOrders.find((o) => String(o.id) === String(id));
+            try {
+                // Load dữ liệu từ LocalStorage
+                const storedOrders = localStorage.getItem('orders');
+                const storedItems = localStorage.getItem('order_items');
 
-                if (foundOrder) {
-                    const storedItems = localStorage.getItem('order_items');
-                    // Sử dụng đúng type OrderItem[] để tránh lỗi ESLint
-                    const allItems: OrderItem[] = storedItems ? JSON.parse(storedItems) : [];
+                if (storedOrders) {
+                    const allOrders = JSON.parse(storedOrders) as Order[];
+                    const foundOrder = allOrders.find((o) => String(o.id) === String(id));
 
-                    const relatedItems = allItems.filter(item => String(item.order_id) === String(id));
-
-                    const itemsMapped: OrderItem[] = relatedItems.map((item) => ({
-                        ...item,
-                        productInfo: {
-                            name: item.productInfo?.name || item.name || `Sản phẩm #${item.product_id}`,
-                            imageUrl: item.productInfo?.imageUrl || item.imageUrl || 'https://via.placeholder.com/70'
-                        }
-                    }));
-
-                    setOrder({ ...foundOrder, itemsDetail: itemsMapped });
+                    if (foundOrder) {
+                        const allItems = storedItems ? (JSON.parse(storedItems) as OrderItem[]) : [];
+                        const relatedItems = allItems.filter(item => item.order_id === foundOrder.id);
+                        setOrder({ ...foundOrder, itemsDetail: relatedItems });
+                    }
                 }
+            } catch (error) {
+                console.error("Lỗi load chi tiết đơn:", error);
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
 
         const timer = setTimeout(loadOrderData, 300);
@@ -67,89 +64,95 @@ const OrderDetailsPage: React.FC = () => {
         setShowCancelModal(false);
     };
 
-    const currentItemsDetail = order?.itemsDetail || [];
-    const displayedItems = isExpanded ? currentItemsDetail : currentItemsDetail.slice(0, 5);
-    const remainingCount = currentItemsDetail.length - 5;
-
+    // Logic hiển thị Step trạng thái
     const getStepStatus = (stepName: string, currentStatus: string) => {
-        const statusOrder = ['pending', 'processing', 'shipping', 'done', 'paid', 'success'];
-        let normalizedStatus = currentStatus;
-
-        if (['paid', 'done', 'success'].includes(currentStatus)) normalizedStatus = 'done';
-        if (['pending', 'confirmed', 'packing', 'unpaid', 'processing'].includes(currentStatus)) normalizedStatus = 'processing';
-
+        const statusOrder = ['pending', 'confirmed', 'packing', 'shipping', 'success'];
         if (currentStatus === 'cancelled' || currentStatus === 'failed') return '';
 
         const stepIndex = statusOrder.indexOf(stepName);
-        const currentIndex = statusOrder.indexOf(normalizedStatus);
+        const currentIndex = statusOrder.indexOf(currentStatus);
 
-        return stepIndex <= currentIndex ? styles.active : '';
+        return (stepIndex !== -1 && currentIndex !== -1 && stepIndex <= currentIndex) ? styles.active : '';
     };
+
+    const currentItemsDetail = order?.itemsDetail || [];
+    const displayedItems = isExpanded ? currentItemsDetail : currentItemsDetail.slice(0, 5);
+    const remainingCount = currentItemsDetail.length - 5;
 
     if (isLoading) return <div style={{ padding: 40, textAlign: 'center' }}>Đang tải...</div>;
 
     if (!order) return (
         <div style={{ padding: 40, textAlign: 'center' }}>
             <p>Không tìm thấy đơn hàng!</p>
-            {/* Sửa lại đường dẫn về /orders theo AppRoutes */}
-            <button onClick={() => navigate('/orders')} className={styles.btnCancel} style={{marginTop: 10}}>Quay lại danh sách</button>
+            <button onClick={() => navigate('/orders')} className={styles.btnCancel} style={{marginTop: 10}}>
+                Quay lại danh sách
+            </button>
         </div>
     );
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <div className={styles.title}>Chi Tiết Đơn Hàng #{String(order.id).substring(0,12).toUpperCase()}</div>
+                <div className={styles.title}>Chi Tiết Đơn Hàng #{String(order.id).substring(0,8).toUpperCase()}</div>
                 <div className={styles.subTitle}>
                     Ngày đặt: {new Date(order.created_at).toLocaleString('vi-VN')}
                 </div>
             </div>
 
-            {/* Giữ nguyên các phần UI còn lại ... */}
+            {/* STEPPER TRẠNG THÁI */}
             <div className={styles.stepper}>
                 {order.status === 'cancelled' ? (
                     <>
                         <div className={`${styles.stepItem} ${styles.active}`}>
-                            <div className={styles.stepIcon}> ✓ </div>
+                            <div className={styles.stepIcon}>✓</div>
                             <div className={styles.stepLabel}>Đang xử lý</div>
                         </div>
                         <div className={`${styles.stepItem} ${styles.stepCancelled}`}>
-                            <div className={styles.stepIcon}> ✕ </div>
+                            <div className={styles.stepIcon}>✕</div>
                             <div className={styles.stepLabel}>Đã hủy</div>
                         </div>
                     </>
                 ) : (
                     <>
-                        <div className={`${styles.stepItem} ${getStepStatus('processing', order.status)}`}>
-                            <div className={styles.stepIcon}> ✓ </div>
+                        <div className={`${styles.stepItem} ${getStepStatus('pending', order.status)}`}>
+                            <div className={styles.stepIcon}>✓</div>
                             <div className={styles.stepLabel}>Đang xử lý</div>
                         </div>
-                        <div className={`${styles.stepItem} ${getStepStatus('shipping', order.status)}`}>
-                            <div className={styles.stepIcon}> ✓ </div>
-                            <div className={styles.stepLabel}>Đang giao</div>
+                        <div className={`${styles.stepItem} ${getStepStatus('confirmed', order.status)}`}>
+                            <div className={styles.stepIcon}>✓</div>
+                            <div className={styles.stepLabel}>Đã xác nhận</div>
                         </div>
-                        <div className={`${styles.stepItem} ${getStepStatus('done', order.status)}`}>
-                            <div className={styles.stepIcon}> ✓ </div>
-                            <div className={styles.stepLabel}>Hoàn thành</div>
+                        <div className={`${styles.stepItem} ${getStepStatus('packing', order.status)}`}>
+                            <div className={styles.stepIcon}>✓</div>
+                            <div className={styles.stepLabel}>Đang gói hàng</div>
+                        </div>
+                        <div className={`${styles.stepItem} ${getStepStatus('shipping', order.status)}`}>
+                            <div className={styles.stepIcon}>✓</div>
+                            <div className={styles.stepLabel}>Đang giao hàng</div>
+                        </div>
+                        <div className={`${styles.stepItem} ${getStepStatus('success', order.status)}`}>
+                            <div className={styles.stepIcon}>✓</div>
+                            <div className={styles.stepLabel}>Đã giao</div>
                         </div>
                     </>
                 )}
             </div>
 
             <div className={styles.contentGrid}>
+                {/* CỘT TRÁI: DANH SÁCH SẢN PHẨM */}
                 <div className={styles.sectionBox}>
                     <div className={styles.boxTitle}>Danh sách sản phẩm ({currentItemsDetail.length})</div>
                     <div className={styles.productList}>
                         {displayedItems.map((item, index) => (
                             <div key={index} className={styles.productItem}>
                                 <img
-                                    src={item.productInfo?.imageUrl}
-                                    alt={item.productInfo?.name}
+                                    src={item.image || 'https://via.placeholder.com/70'}
+                                    alt={item.name}
                                     className={styles.productImg}
                                 />
                                 <div className={styles.productInfo}>
                                     <div className={styles.prodName}>
-                                        {item.productInfo?.name}
+                                        {item.name || "Sản phẩm"}
                                     </div>
                                     <div className={styles.prodQty}>Số lượng: x{item.quantity}</div>
                                 </div>
@@ -171,11 +174,14 @@ const OrderDetailsPage: React.FC = () => {
                     )}
                 </div>
 
+                {/* CỘT PHẢI: THÔNG TIN GIAO HÀNG & THANH TOÁN */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                     <div className={styles.sectionBox}>
                         <div className={styles.boxTitle}>Thông tin giao hàng</div>
                         <div className={styles.infoRow}>
-                            <span className={styles.infoLabel} style={{fontWeight: 'bold', display: 'block'}}>{order.recipient_name}</span>
+                            <span className={styles.infoLabel} style={{fontWeight: 'bold', display: 'block'}}>
+                                {order.recipient_name}
+                            </span>
                             {order.recipient_phone}
                         </div>
                         <div className={styles.infoRow}>
@@ -186,8 +192,8 @@ const OrderDetailsPage: React.FC = () => {
                     <div className={styles.sectionBox}>
                         <div className={styles.boxTitle}>Thanh toán</div>
                         <div className={styles.paymentRow}>
-                            <span>Tạm tính:</span>
-                            <span>{formatCurrency(order.subtotal)}</span>
+                            <span>Tổng tiền hàng:</span>
+                            <span>{formatCurrency(order.subtotal || order.total_amount)}</span>
                         </div>
                         <div className={styles.paymentRow}>
                             <span>Phí vận chuyển:</span>
@@ -198,37 +204,41 @@ const OrderDetailsPage: React.FC = () => {
                             <span>- {formatCurrency(order.discount_amount || 0)}</span>
                         </div>
                         <div className={styles.totalRow}>
-                            <span>Tổng cộng:</span>
+                            <span>Tổng thanh toán:</span>
                             <span>{formatCurrency(order.total_amount)}</span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div className={styles.actionBar}>
-                {['pending', 'confirmed', 'packing', 'unpaid', 'processing'].includes(order.status) && (
-                    <button className={styles.btnCancel} onClick={() => setShowCancelModal(true)}>
-                        Hủy đơn hàng
-                    </button>
-                )}
-            </div>
-
-            {showCancelModal && (
-                <div className={styles.modalOverlay} onClick={() => setShowCancelModal(false)}>
-                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <h3 style={{ marginBottom: 10 }}>Xác nhận hủy đơn</h3>
-                        <p style={{ color: '#666', marginBottom: 20 }}>
-                            Bạn có chắc chắn muốn hủy đơn hàng này không?
-                            <br />
-                            Hành động này không thể hoàn tác.
-                        </p>
-                        <div className={styles.modalActions}>
-                            <button className={styles.btnCloseModal} onClick={() => setShowCancelModal(false)}>Đóng</button>
-                            <button className={styles.btnConfirm} onClick={handleConfirmCancel}>Xác nhận hủy</button>
-                        </div>
+                    <div className={styles.actionBar}>
+                        {['pending', 'confirmed', 'packing', 'unpaid', 'processing'].includes(order.status) && (
+                            <button className={styles.btnCancel} onClick={() => setShowCancelModal(true)}>
+                                Hủy đơn hàng
+                            </button>
+                        )}
                     </div>
+
+                    {/* MODAL XÁC NHẬN HỦY */}
+                    {showCancelModal && (
+                        <div className={styles.modalOverlay} onClick={() => setShowCancelModal(false)}>
+                            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                                <h3 className={styles.modalTitle}>Xác nhận hủy đơn</h3>
+                                <p className={styles.modalDesc}>
+                                    Bạn có chắc chắn muốn hủy đơn hàng này không?
+                                    <br />
+                                    Hành động này không thể hoàn tác.
+                                </p>
+                                <div className={styles.modalActions}>
+                                    <button className={styles.btnCloseModal} onClick={() => setShowCancelModal(false)}>
+                                        Đóng
+                                    </button>
+                                    <button className={styles.btnConfirm} onClick={handleConfirmCancel}>
+                                        Xác nhận hủy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
         </div>
     );
 };
